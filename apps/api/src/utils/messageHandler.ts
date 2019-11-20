@@ -8,8 +8,8 @@ import {
 } from '@monorepo/core';
 import {setTemp, setPower, setVariable} from '@monorepo/store';
 
-const getVariableName = (setTopic: RequestSetTopic | string) =>
-  setTopic.split('/')[1];
+const stripSet = (setTopic: RequestSetTopic | string) =>
+  setTopic.split('set/')[1];
 
 const parsePayload = (payload: string) =>
   payload.split(';').map(keyVal => keyVal.split('='));
@@ -37,11 +37,11 @@ export const handleMessage = (topic: Topic, payload: string) => {
     case ReadTopic.variables:
       parsePayload(payload).forEach(
         ([topic, value]: [RequestSetTopic, string]) =>
-          setVariable(getVariableName(topic) as Room, parseFloat(value)),
+          setVariable(stripSet(topic) as Room, parseFloat(value)),
       );
       break;
     case RequestSetTopic.confirmed:
-      const [key, val] = getVariableName(payload).split('=') as [
+      const [key, val] = stripSet(payload).split('=') as [
         keyof HomeState['variables'],
         string,
       ];
