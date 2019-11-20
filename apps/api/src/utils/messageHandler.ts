@@ -6,7 +6,13 @@ import {
   HomeState,
   PowerState,
 } from '@monorepo/core';
-import {setTemp, setPower, setVariables} from '@monorepo/store';
+import {setTemp, setPower, setVariable} from '@monorepo/store';
+
+const getVariableName = (setTopic: RequestSetTopic | string) =>
+  setTopic.split('/')[1];
+
+const parsePayload = (payload: string) =>
+  payload.split(';').map(keyVal => keyVal.split('='));
 
 export const handleMessage = (topic: Topic, payload: string) => {
   switch (topic) {
@@ -24,25 +30,22 @@ export const handleMessage = (topic: Topic, payload: string) => {
       break;
     case ReadTopic.power:
       parsePayload(payload).forEach(
-        ([key, value]: [keyof HomeState['power'], PowerState]) =>
-          setPower(key, value),
+        ([topic, value]: [keyof HomeState['power'], PowerState]) =>
+          setPower(getVariableName(topic) as Room, value),
       );
       break;
     case ReadTopic.variables:
       parsePayload(payload).forEach(
         ([key, value]: [keyof HomeState['variables'], string]) =>
-          setVariables(key, parseFloat(value)),
+          setVariable(key, parseFloat(value)),
       );
       break;
     case RequestSetTopic.confirmed:
-      const [key, val] = payload.split('/')[1].split('=') as [
+      const [key, val] = getVariableName(payload).split('=') as [
         keyof HomeState['variables'],
         string,
       ];
-      setVariables(key, parseFloat(val));
+      setVariable(key, parseFloat(val));
       break;
   }
 };
-
-const parsePayload = (payload: string) =>
-  payload.split(';').map(keyVal => keyVal.split('='));
