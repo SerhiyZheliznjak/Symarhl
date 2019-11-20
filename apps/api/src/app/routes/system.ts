@@ -2,7 +2,7 @@ import * as express from 'express';
 import {exec} from 'child_process';
 import * as debugLogger from 'debug';
 import {INTERNAL_SERVER_ERROR} from 'http-status-codes';
-import {getState} from '../services/store';
+import {getState} from '@monorepo/store';
 
 const debug = debugLogger('heating-service:system');
 

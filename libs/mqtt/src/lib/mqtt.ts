@@ -4,15 +4,15 @@ import {
   RequestSetTopic,
   Topic,
   RequestGetTopic,
-  ReadTopic,
   Variables,
   HomeState
 } from '@monorepo/core';
 
-export class MqttService {
+class MqttService {
   private client: AsyncMqttClient;
+  private confirmations: Map<keyof Variables, number> = new Map();
 
-  constructor(
+  connect(
     brokerAddress: string,
     messageHandler: (topic: Topic, payload: string) => unknown
   ) {
@@ -23,10 +23,18 @@ export class MqttService {
         1000
       );
     });
+    this.client.on('message', (topic: Topic, bytes: unknown) => {
+      const payload = String(bytes);
+      if (topic === RequestSetTopic.confirmed) {
+        const [key, val] = payload.split('/')[1].split('=') as [
+          keyof HomeState['variables'],
+          string
+        ];
+        this.confirmations.set(key, parseFloat(val));
+      }
+      messageHandler(topic, payload);
+    });
     this.client.subscribe('#');
-    this.client.on('message', (topic: ReadTopic, bytes: unknown) =>
-      messageHandler(topic, String(bytes))
-    );
   }
 
   async sendMessage(topic: Topic, payload: string) {
@@ -36,17 +44,20 @@ export class MqttService {
   async setVariableValue(
     topic: RequestSetTopic,
     payload: string,
-    getState: () => HomeState,
     attempts = 5
   ) {
+    const verifyConfirmation = () => {
+      if (
+        this.confirmations.get(varName) !== parseFloat(payload) &&
+        attempts > 0
+      )
+        this.setVariableValue(topic, payload, --attempts);
+    };
+
     await this.sendMessage(topic, payload);
     setTimeout(verifyConfirmation, 1000);
     const varName = topic.split('/')[1] as keyof Variables;
-
-    function verifyConfirmation() {
-      const {variables} = getState();
-      if (variables[varName] !== parseFloat(payload) && attempts > 0)
-        this.setVariableValue(topic, payload, --attempts);
-    }
   }
 }
+
+export const mqttService = new MqttService();

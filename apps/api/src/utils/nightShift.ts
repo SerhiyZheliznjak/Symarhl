@@ -1,8 +1,8 @@
 const {getSunrise, getSunset} = require('sunrise-sunset-js');
 const {scheduleJob} = require('node-schedule');
-import {homeLocation} from '../constants/environment';
-import {RequestSetTopic} from '../constants/topics';
-import {setVariableValue} from './mqtt';
+import {homeLocation} from '../../config.json';
+import {RequestSetTopic} from '@monorepo/core';
+import {mqttService} from '@monorepo/mqtt';
 
 function getTomorrow(today: Date): Date {
   const tomorrow = new Date();
@@ -21,11 +21,11 @@ function getHomeSunset(date: Date): Date {
 }
 
 function setDayShift() {
-  setVariableValue(RequestSetTopic.nightShift, '0.00');
+  mqttService.setVariableValue(RequestSetTopic.nightShift, '0.00');
 }
 
 function setNightShift() {
-  setVariableValue(RequestSetTopic.nightShift, '1.00');
+  mqttService.setVariableValue(RequestSetTopic.nightShift, '1.00');
 }
 
 function scheduleDayShift(today: Date) {

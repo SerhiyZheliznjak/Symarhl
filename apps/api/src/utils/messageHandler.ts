@@ -1,7 +1,12 @@
-import {ReadTopic, RequestSetTopic, Topic} from '../constants/topics';
-import {setTemp, setPower, setVariables} from './store';
-import {Room} from '../constants/Rooms';
-import {HomeState, PowerState} from '@symarhl/core';
+import {
+  ReadTopic,
+  RequestSetTopic,
+  Topic,
+  Room,
+  HomeState,
+  PowerState,
+} from '@monorepo/core';
+import {setTemp, setPower, setVariables} from '@monorepo/store';
 
 export const handleMessage = (topic: Topic, payload: string) => {
   switch (topic) {
@@ -18,23 +23,21 @@ export const handleMessage = (topic: Topic, payload: string) => {
       setTemp(Room.bedroom, parseFloat(payload));
       break;
     case ReadTopic.power:
-      parsePayload(
-        payload
-      ).forEach(([key, value]: [keyof HomeState['power'], PowerState]) =>
-        setPower(key, value)
+      parsePayload(payload).forEach(
+        ([key, value]: [keyof HomeState['power'], PowerState]) =>
+          setPower(key, value),
       );
       break;
     case ReadTopic.variables:
-      parsePayload(
-        payload
-      ).forEach(([key, value]: [keyof HomeState['variables'], string]) =>
-        setVariables(key, parseFloat(value))
+      parsePayload(payload).forEach(
+        ([key, value]: [keyof HomeState['variables'], string]) =>
+          setVariables(key, parseFloat(value)),
       );
       break;
     case RequestSetTopic.confirmed:
       const [key, val] = payload.split('/')[1].split('=') as [
         keyof HomeState['variables'],
-        string
+        string,
       ];
       setVariables(key, parseFloat(val));
       break;

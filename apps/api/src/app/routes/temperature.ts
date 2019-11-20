@@ -1,9 +1,9 @@
 import * as express from 'express';
-import {Room} from '../constants/Rooms';
 import {BAD_REQUEST, OK} from 'http-status-codes';
-import {setVariableValue} from '../services/mqtt';
-import {RequestSetTopic} from '../constants/topics';
-import {getState} from '../services/store';
+
+import {Room, RequestSetTopic} from '@monorepo/core';
+import {mqttService} from '@monorepo/mqtt';
+import {getState} from '@monorepo/store';
 
 const temperatureRouter = express.Router();
 
@@ -19,25 +19,25 @@ temperatureRouter.put(
 
     switch (room) {
       case Room.studio:
-        await setVariableValue(RequestSetTopic.studio, temp);
+        await mqttService.setVariableValue(RequestSetTopic.studio, temp);
         res.send(OK);
         break;
       case Room.bathroom:
-        await setVariableValue(RequestSetTopic.bathroom, temp);
+        await mqttService.setVariableValue(RequestSetTopic.bathroom, temp);
         res.send(OK);
         break;
       case Room.kidsroom:
-        await setVariableValue(RequestSetTopic.kidsroom, temp);
+        await mqttService.setVariableValue(RequestSetTopic.kidsroom, temp);
         res.send(OK);
         break;
       case Room.bedroom:
-        await setVariableValue(RequestSetTopic.bedroom, temp);
+        await mqttService.setVariableValue(RequestSetTopic.bedroom, temp);
         res.send(OK);
         break;
       default:
         res.status(BAD_REQUEST);
     }
-  }
+  },
 );
 
 export {temperatureRouter};
