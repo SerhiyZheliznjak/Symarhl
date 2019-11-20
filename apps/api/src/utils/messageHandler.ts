@@ -31,13 +31,13 @@ export const handleMessage = (topic: Topic, payload: string) => {
     case ReadTopic.power:
       parsePayload(payload).forEach(
         ([topic, value]: [keyof HomeState['power'], PowerState]) =>
-          setPower(getVariableName(topic) as Room, value),
+          setPower(topic, value),
       );
       break;
     case ReadTopic.variables:
       parsePayload(payload).forEach(
-        ([key, value]: [keyof HomeState['variables'], string]) =>
-          setVariable(key, parseFloat(value)),
+        ([topic, value]: [RequestSetTopic, string]) =>
+          setVariable(getVariableName(topic) as Room, parseFloat(value)),
       );
       break;
     case RequestSetTopic.confirmed:
