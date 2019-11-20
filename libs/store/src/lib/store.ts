@@ -1,12 +1,12 @@
-import {Room} from '../constants/Rooms';
-import {HomeState, NO_READINGS, PowerState} from '@symarhl/core';
+import {Room} from '@monorepo/core';
+import {HomeState, NO_READINGS, PowerState} from '@monorepo/core';
 
 const homeState: HomeState = {
   temp: {
     studio: NO_READINGS,
     bathroom: NO_READINGS,
     bedroom: NO_READINGS,
-    kidsroom: NO_READINGS,
+    kidsroom: NO_READINGS
   },
   variables: {
     studio: NO_READINGS,
@@ -15,7 +15,7 @@ const homeState: HomeState = {
     bedroom: NO_READINGS,
     interval: NO_READINGS,
     hysteresis: NO_READINGS,
-    nightShift: NO_READINGS,
+    nightShift: NO_READINGS
   },
   power: {
     pump: '-1',
@@ -23,8 +23,8 @@ const homeState: HomeState = {
     studio: '-1',
     bathroom: '-1',
     kidsroom: '-1',
-    bedroom: '-1',
-  },
+    bedroom: '-1'
+  }
 };
 
 export function setVariables(

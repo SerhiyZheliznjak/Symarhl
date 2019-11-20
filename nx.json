@@ -19,6 +19,12 @@
     },
     "symarhl-server": {
       "tags": []
+    },
+    "mqtt": {
+      "tags": []
+    },
+    "store": {
+      "tags": []
     }
   }
 }

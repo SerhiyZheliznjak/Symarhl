@@ -1,8 +1,8 @@
 import * as express from 'express';
-import {setVariableValue} from '../services/mqtt';
-import {RequestSetTopic} from '../constants/topics';
 import {OK, INTERNAL_SERVER_ERROR} from 'http-status-codes';
-import {Variables} from '@symarhl/core';
+import {setVariableValue} from '@monorepo/mqtt';
+import {RequestSetTopic} from '@monorepo/core';
+import {Variables} from '@monorepo/core';
 
 const variablesRouter = express.Router();
 
