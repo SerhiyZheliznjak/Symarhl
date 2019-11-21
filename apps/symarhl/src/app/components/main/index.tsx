@@ -27,7 +27,7 @@ class ARoom {
 }
 
 class MainApp extends React.PureComponent<Props> {
-  private interval!: NodeJS.Timeout;
+  private interval;
 
   fetchData = () => {
     const {fetchTemp, fetchHomeState} = this.props;

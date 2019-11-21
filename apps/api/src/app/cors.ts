@@ -1,9 +1,11 @@
 import * as cors from 'cors';
 import * as debugLogger from 'debug';
-import {WEB_DEV_ADDRESS} from '@monorepo/core';
+import {NETWORK_DEV, NETWORK_PROD} from '@monorepo/core';
 
 const debug = debugLogger('heating-service:cors');
-const whiteList = [WEB_DEV_ADDRESS];
+const whiteList = [NETWORK_DEV.WEB_PORT, NETWORK_PROD.WEB_PORT].map(
+  port => `http://localhost:${port}`,
+);
 
 debug(`enabled for: [${whiteList}]`);
 

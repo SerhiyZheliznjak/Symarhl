@@ -13,5 +13,3 @@ export const NETWORK_DEV = {
   HISTORY_PORT: 8088,
   MQTT_ADDRESS: '192.168.31.247:1883',
 };
-
-export const WEB_DEV_ADDRESS = 'http://localhost:4200';

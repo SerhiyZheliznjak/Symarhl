@@ -1,3 +1,6 @@
+import {NETWORK_PROD} from '@monorepo/core';
+
 export const environment = {
-  production: true
+  production: false,
+  port: NETWORK_PROD.WEB_PORT,
 };

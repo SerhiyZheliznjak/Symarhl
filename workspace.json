@@ -172,8 +172,7 @@
           "options": {
             "outputPath": "dist/apps/symarhl-server",
             "main": "apps/symarhl-server/src/main.ts",
-            "tsConfig": "apps/symarhl-server/tsconfig.app.json",
-            "assets": ["apps/symarhl-server/src/assets"]
+            "tsConfig": "apps/symarhl-server/tsconfig.app.json"
           },
           "configurations": {
             "production": {
