@@ -5,7 +5,6 @@ import {
   Topic,
   RequestGetTopic,
   Variables,
-  HomeState
 } from '@monorepo/core';
 
 class MqttService {
@@ -14,21 +13,21 @@ class MqttService {
 
   connect(
     brokerAddress: string,
-    messageHandler: (topic: Topic, payload: string) => unknown
+    messageHandler: (topic: Topic, payload: string) => unknown,
   ) {
     this.client = connect(`tcp://${brokerAddress}`);
     this.client.on('connect', () => {
       setTimeout(
         () => this.sendMessage(RequestGetTopic.variables, String(Date.now())),
-        1000
+        1000,
       );
     });
     this.client.on('message', (topic: Topic, bytes: unknown) => {
       const payload = String(bytes);
       if (topic === RequestSetTopic.confirmed) {
         const [key, val] = payload.split('/')[1].split('=') as [
-          keyof HomeState['variables'],
-          string
+          keyof Variables,
+          string,
         ];
         this.confirmations.set(key, parseFloat(val));
       }
@@ -44,8 +43,9 @@ class MqttService {
   async setVariableValue(
     topic: RequestSetTopic,
     payload: string,
-    attempts = 5
+    attempts = 5,
   ) {
+    const varName = topic.split('/')[1] as keyof Variables;
     const verifyConfirmation = () => {
       if (
         this.confirmations.get(varName) !== parseFloat(payload) &&
@@ -56,7 +56,6 @@ class MqttService {
 
     await this.sendMessage(topic, payload);
     setTimeout(verifyConfirmation, 1000);
-    const varName = topic.split('/')[1] as keyof Variables;
   }
 }
 

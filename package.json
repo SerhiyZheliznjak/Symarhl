@@ -5,10 +5,12 @@
   "scripts": {
     "nx": "nx",
     "start": "nx serve symarhl --watch --liveReload",
+    "deploy": "yarn build && yarn push",
     "build": "yarn build:api && yarn build:web && yarn build:web-server",
     "build:api": "nx build api --prod",
     "build:web": "nx build --prod",
     "build:web-server": "nx build symarhl-server --prod",
+    "push": "cd dist && git add . && git commit -m \"script commit\" && git push && cd ../",
     "test": "nx test",
     "lint": "nx workspace-lint && nx lint --fix",
     "e2e": "nx e2e",

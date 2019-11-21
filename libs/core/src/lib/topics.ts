@@ -19,7 +19,7 @@ export enum RequestSetTopic {
   bathroom = 'set/bathroom',
   kidsroom = 'set/kidsroom',
   bedroom = 'set/bedroom',
-  confirmed = 'set/confirmed',
+  confirmed = 'set/confirmation',
 }
 
 export type Topic = ReadTopic | RequestSetTopic | RequestGetTopic;
