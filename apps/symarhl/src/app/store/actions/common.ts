@@ -1,7 +1,7 @@
 import {commonActions} from './types';
 
 import {Dispatch} from 'redux';
-import {HomeState, RoomTemp, Variables} from '@monorepo/core';
+import {HomeState, RoomTemp, Variables, Power} from '@monorepo/core';
 import heatingService from '../../api/heatingService';
 import {AxiosResponse} from 'axios';
 
@@ -9,7 +9,10 @@ export const getHomeState = () => async (dispatch: Dispatch) => {
   const response: AxiosResponse<HomeState> = await heatingService.get(
     '/system/state',
   );
-  dispatch({type: commonActions.homeState, payload: response.data});
+  const {variables, power, temp} = response.data;
+  dispatch({type: commonActions.homeTemp, payload: temp});
+  dispatch({type: commonActions.power, payload: power});
+  dispatch({type: commonActions.variables, payload: variables});
 };
 
 export const getHomeTemperature = () => async (dispatch: Dispatch) => {
@@ -34,8 +37,8 @@ export const setMinTemp = (room: string, temp: number) => async (
 
 export type CommonActionType =
   | {type: typeof commonActions.variables; payload: Variables}
+  | {type: typeof commonActions.power; payload: Power}
   | {type: typeof commonActions.homeTemp; payload: RoomTemp}
-  | {type: typeof commonActions.homeState; payload: HomeState}
   | {type: typeof commonActions.setStudioTemp; payload: string}
   | {type: typeof commonActions.setBathromTemp; payload: string}
   | {type: typeof commonActions.setKidsroomTemp; payload: string}

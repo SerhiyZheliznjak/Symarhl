@@ -1,5 +1,5 @@
 import {Room} from '@monorepo/core';
-import {HomeState, NO_READINGS, PowerState} from '@monorepo/core';
+import {HomeState, NO_READINGS, PowerValue} from '@monorepo/core';
 
 const homeState: HomeState = {
   temp: {
@@ -40,7 +40,7 @@ export function setVariable(
   homeState.variables[variable] = val;
 }
 
-export function setPower(power: keyof HomeState['power'], state: PowerState) {
+export function setPower(power: keyof HomeState['power'], state: PowerValue) {
   homeState.power[power] = state;
 }
 

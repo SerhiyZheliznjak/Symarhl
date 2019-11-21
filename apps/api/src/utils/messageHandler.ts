@@ -4,7 +4,7 @@ import {
   Topic,
   Room,
   HomeState,
-  PowerState,
+  PowerValue,
 } from '@monorepo/core';
 import {setTemp, setPower, setVariable} from '@monorepo/store';
 
@@ -30,7 +30,7 @@ export const handleMessage = (topic: Topic, payload: string) => {
       break;
     case ReadTopic.power:
       parsePayload(payload).forEach(
-        ([topic, value]: [keyof HomeState['power'], PowerState]) =>
+        ([topic, value]: [keyof HomeState['power'], PowerValue]) =>
           setPower(topic, value),
       );
       break;

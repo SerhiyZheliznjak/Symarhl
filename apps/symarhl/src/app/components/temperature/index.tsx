@@ -15,7 +15,7 @@ interface Props {
 class Temperature extends React.PureComponent<Props> {
   tickTemp(shift: number) {
     const {room, temperature, doSetMinTemp} = this.props;
-    doSetMinTemp(room, temperature + shift);
+    doSetMinTemp(room, +temperature + shift);
   }
 
   onTempUp = () => {

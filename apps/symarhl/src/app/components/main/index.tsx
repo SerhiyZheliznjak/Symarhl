@@ -6,15 +6,15 @@ import styles from '../../icons/styles';
 import Room from '../room';
 import {connect} from 'react-redux';
 import {StoreType} from '../../store/reducers';
-import {HomeState, RoomTemp} from '@monorepo/core';
+import {RoomTemp, Variables, Power, PowerValue} from '@monorepo/core';
 import {isOn} from '../../utility/power';
-import {getHomeTemperature, getHomeState} from '../../store/actions/common';
+import {getHomeState} from '../../store/actions/common';
 
 interface Props {
   isLandscape: boolean;
   temperature: RoomTemp;
-  homeState: HomeState;
-  fetchTemp: () => void;
+  power: Power;
+  variables: Variables;
   fetchHomeState: () => void;
 }
 
@@ -23,6 +23,7 @@ class ARoom {
     public name: string,
     public temp: number,
     public minTemp: number,
+    public power: PowerValue,
   ) {}
 }
 
@@ -30,8 +31,7 @@ class MainApp extends React.PureComponent<Props> {
   private interval;
 
   fetchData = () => {
-    const {fetchTemp, fetchHomeState} = this.props;
-    fetchTemp();
+    const {fetchHomeState} = this.props;
     fetchHomeState();
   };
 
@@ -45,11 +45,10 @@ class MainApp extends React.PureComponent<Props> {
   }
 
   render() {
-    const {isLandscape, temperature, homeState} = this.props;
-    const {variables, power} = homeState;
+    const {isLandscape, temperature, power, variables} = this.props;
     const rooms: ARoom[] = Array.from(Object.entries(temperature)).map(
       ([name, temp]: [keyof RoomTemp, number]) =>
-        new ARoom(name, temp, variables[name]),
+        new ARoom(name, temp, variables[name], power[name]),
     );
     return (
       <React.Fragment>
@@ -68,12 +67,13 @@ class MainApp extends React.PureComponent<Props> {
         </AppBar>
         <Container maxWidth="lg">
           <Grid container justify="space-around" spacing={2}>
-            {rooms.map(({name, temp, minTemp}) => (
+            {rooms.map(({name, temp, minTemp, power}) => (
               <Room
                 key={name}
                 name={name}
                 isLandscape={isLandscape}
                 temp={temp}
+                power={power}
                 minTemp={minTemp}
               />
             ))}
@@ -85,13 +85,13 @@ class MainApp extends React.PureComponent<Props> {
 }
 
 export default connect(
-  ({screen, temperature, homeState}: StoreType) => ({
+  ({screen, temperature, power, variables}: StoreType) => ({
     isLandscape: screen.isLandscape,
     temperature,
-    homeState,
+    power,
+    variables,
   }),
   (dispatch: Dispatch<any>) => ({
-    fetchTemp: () => dispatch(getHomeTemperature()),
     fetchHomeState: () => dispatch(getHomeState()),
   }),
 )(MainApp);

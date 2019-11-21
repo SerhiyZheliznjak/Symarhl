@@ -1,4 +1,4 @@
-export type PowerState = '-1' | '0' | '1';
+export type PowerValue = '-1' | '0' | '1';
 
 export interface RoomTemp {
   studio: number;
@@ -14,12 +14,12 @@ export interface Variables extends RoomTemp {
 }
 
 export interface Power {
-  pump: PowerState;
-  wall: PowerState;
-  studio: PowerState;
-  bathroom: PowerState;
-  kidsroom: PowerState;
-  bedroom: PowerState;
+  pump: PowerValue;
+  wall: PowerValue;
+  studio: PowerValue;
+  bathroom: PowerValue;
+  kidsroom: PowerValue;
+  bedroom: PowerValue;
 }
 
 export interface HomeState {

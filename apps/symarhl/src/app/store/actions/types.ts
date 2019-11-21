@@ -6,7 +6,6 @@ export const commonActions = {
   setBedroomTemp: 'COMMON/SET/BEDROOM' as 'COMMON/SET/BEDROOM',
   variables: 'COMMON/SYSTEM/VARIABLES' as 'COMMON/SYSTEM/VARIABLES',
   power: 'COMMON/SYSTEM/POWER' as 'COMMON/SYSTEM/POWER',
-  homeState: 'COMMON/HOME_STATE' as 'COMMON/HOME_STATE',
 };
 
 export const webActions = {

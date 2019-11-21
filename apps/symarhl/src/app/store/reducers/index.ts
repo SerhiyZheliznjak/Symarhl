@@ -1,12 +1,12 @@
 import {combineReducers} from 'redux';
 import {screenReducer} from './web';
-import {homeStateReducer, tempReducer, variablesReducer} from './common';
+import {powerReducer, tempReducer, variablesReducer} from './common';
 
 const combined = combineReducers({
   screen: screenReducer,
   temperature: tempReducer,
   variables: variablesReducer,
-  homeState: homeStateReducer,
+  power: powerReducer,
 });
 
 export type StoreType = ReturnType<typeof combined>;

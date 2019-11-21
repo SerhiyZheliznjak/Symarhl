@@ -1,6 +1,6 @@
 import {commonActions} from '../actions/types';
 import {CommonActionType} from '../actions/common';
-import {HomeState, NO_READINGS, RoomTemp, Variables} from '@monorepo/core';
+import {NO_READINGS, RoomTemp, Variables, Power} from '@monorepo/core';
 
 const INITIAL_VARIABLES_STATE: Variables = {
   studio: NO_READINGS,
@@ -67,25 +67,21 @@ export function tempReducer(
   }
 }
 
-const INITIAL_HOME_STATE: HomeState = {
-  temp: INITIAL_TEMP_STATE,
-  variables: INITIAL_VARIABLES_STATE,
-  power: {
-    ...(Array.from(Object.keys(INITIAL_TEMP_STATE)).reduce(
-      (res, key) => ({...res, [key]: '-1'}),
-      {},
-    ) as HomeState['power']),
-    pump: '-1',
-    wall: '-1',
-  },
+const INITIAL_POWER_STATE: Power = {
+  pump: '-1',
+  studio: '-1',
+  bathroom: '-1',
+  kidsroom: '-1',
+  bedroom: '-1',
+  wall: '-1',
 };
 
-export function homeStateReducer(
-  state = INITIAL_HOME_STATE,
+export function powerReducer(
+  state = INITIAL_POWER_STATE,
   action: CommonActionType,
 ) {
   switch (action.type) {
-    case commonActions.homeState:
+    case commonActions.power:
       return {
         ...action.payload,
       };

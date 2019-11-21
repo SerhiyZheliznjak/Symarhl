@@ -2,23 +2,21 @@ import React from 'react';
 import {Grid, Paper, Typography} from '@material-ui/core';
 import Temperature from '../temperature';
 import FloorIcon from '../../icons/FloorIcon';
-import {HomeState} from '@monorepo/core';
-import {StoreType} from '../../store/reducers';
-import {connect} from 'react-redux';
+import {PowerValue} from '@monorepo/core';
 import {isOn} from '../../utility/power';
 import ErrorIcon from '@material-ui/icons/Error';
 
 interface Props {
   name: string;
-  temp: string;
+  temp: number;
   minTemp: number;
   isLandscape: boolean;
-  homeState: HomeState;
+  power: PowerValue;
 }
 
 class Room extends React.PureComponent<Props> {
-  renderTemp(val: string) {
-    if (parseInt(val) === -127) {
+  renderTemp(val: number) {
+    if (val === -127) {
       return <ErrorIcon color="error" />;
     }
     return (
@@ -29,8 +27,7 @@ class Room extends React.PureComponent<Props> {
   }
 
   render() {
-    const {name, isLandscape, temp, minTemp, homeState} = this.props;
-    const {power} = homeState;
+    const {name, isLandscape, temp, minTemp, power} = this.props;
     return (
       <Grid item xs={isLandscape ? 3 : 6}>
         <Paper>
@@ -62,4 +59,4 @@ class Room extends React.PureComponent<Props> {
   }
 }
 
-export default connect(({homeState}: StoreType) => ({homeState}))(Room);
+export default Room;
