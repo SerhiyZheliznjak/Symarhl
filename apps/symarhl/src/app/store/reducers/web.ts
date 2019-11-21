@@ -1,9 +1,9 @@
-import { webActions } from "../actions/types";
-import { WebActionType } from "../actions";
-import { getRatio } from "../utility/screen";
+import {webActions} from '../actions/types';
+import {WebActionType} from '../actions/web';
+import {getRatio} from '../../utility/screen';
 
 const INITIAL_STATE = {
-  isLandscape: getRatio() > 1
+  isLandscape: getRatio() > 1,
 };
 
 export function screenReducer(state = INITIAL_STATE, action: WebActionType) {
@@ -11,7 +11,7 @@ export function screenReducer(state = INITIAL_STATE, action: WebActionType) {
     case webActions.windowRatio:
       return {
         ...state,
-        isLandscape: action.payload > 1
+        isLandscape: action.payload > 1,
       };
     default:
       return state;

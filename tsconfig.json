@@ -18,7 +18,8 @@
     "paths": {
       "@monorepo/core": ["libs/core/src/index.ts"],
       "@monorepo/mqtt": ["libs/mqtt/src/index.ts"],
-      "@monorepo/store": ["libs/store/src/index.ts"]
+      "@monorepo/store": ["libs/store/src/index.ts"],
+      "@monorepo/redux": ["libs/redux/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

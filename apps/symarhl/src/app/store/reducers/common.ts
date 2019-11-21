@@ -1,6 +1,6 @@
 import {commonActions} from '../actions/types';
-import {CommonActionType} from '../actions';
-import {Variables, HomeState, RoomTemp, NO_READINGS} from '@symarhl/common';
+import {CommonActionType} from '../actions/common';
+import {HomeState, NO_READINGS, RoomTemp, Variables} from '@monorepo/core';
 
 const INITIAL_VARIABLES_STATE: Variables = {
   studio: NO_READINGS,

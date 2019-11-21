@@ -1,8 +1,9 @@
 const {getSunrise, getSunset} = require('sunrise-sunset-js');
 const {scheduleJob} = require('node-schedule');
-import {homeLocation} from '../../config.json';
 import {RequestSetTopic} from '@monorepo/core';
 import {mqttService} from '@monorepo/mqtt';
+
+const homeLocation = [49.827896, 23.987235];
 
 function getTomorrow(today: Date): Date {
   const tomorrow = new Date();

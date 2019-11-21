@@ -1,8 +1,8 @@
-import {webActions, commonActions} from './types';
+import {commonActions} from './types';
 
 import {Dispatch} from 'redux';
-import {RoomsTemp, Variables, HomeState} from '../interfaces';
-import heatingService from '../api/heatingService';
+import {HomeState, RoomTemp, Variables} from '@monorepo/core';
+import heatingService from '../../api/heatingService';
 import {AxiosResponse} from 'axios';
 
 export const getHomeState = () => async (dispatch: Dispatch) => {
@@ -13,7 +13,7 @@ export const getHomeState = () => async (dispatch: Dispatch) => {
 };
 
 export const getHomeTemperature = () => async (dispatch: Dispatch) => {
-  const response: AxiosResponse<RoomsTemp> = await heatingService.get('/temp');
+  const response: AxiosResponse<RoomTemp> = await heatingService.get('/temp');
   dispatch({type: commonActions.homeTemp, payload: response.data});
 };
 
@@ -32,15 +32,8 @@ export const setMinTemp = (room: string, temp: number) => async (
   }
 };
 
-export const ratioChange = (payload: number) => ({
-  type: webActions.windowRatio,
-  payload,
-});
-
 export type CommonActionType =
   | {type: typeof commonActions.variables; payload: Variables}
-  | {type: typeof commonActions.homeTemp; payload: RoomsTemp}
+  | {type: typeof commonActions.homeTemp; payload: RoomTemp}
   | {type: typeof commonActions.homeState; payload: HomeState}
   | {type: typeof commonActions.setBathromTemp; payload: string};
-
-export type WebActionType = ReturnType<typeof ratioChange>;

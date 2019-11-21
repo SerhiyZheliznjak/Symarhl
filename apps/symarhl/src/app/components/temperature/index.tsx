@@ -4,7 +4,7 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import {connect} from 'react-redux';
 import debounce from 'lodash/debounce';
-import {setMinTemp} from '../../actions';
+import {setMinTemp} from '../../store/actions/common';
 
 interface Props {
   room: string;
@@ -43,9 +43,12 @@ class Temperature extends React.PureComponent<Props> {
   }
 }
 
-export default connect(null, (dispatch: Dispatch<any>) => ({
-  doSetMinTemp: debounce(
-    (room: string, temp: number) => dispatch(setMinTemp(room, temp)),
-    500,
-  ),
-}))(Temperature);
+export default connect(
+  null,
+  (dispatch: Dispatch<any>) => ({
+    doSetMinTemp: debounce(
+      (room: string, temp: number) => dispatch(setMinTemp(room, temp)),
+      500,
+    ),
+  }),
+)(Temperature);

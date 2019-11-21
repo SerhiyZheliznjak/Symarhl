@@ -1,11 +1,11 @@
-import React, { Dispatch } from "react";
-import { Router, Route, Switch } from "react-router-dom";
+import React, {Dispatch} from 'react';
+import {Route, Router, Switch} from 'react-router-dom';
+import {connect} from 'react-redux';
 
-import { getRatio } from "../utility/screen";
-import history from "../history";
-import MainApp from "./main";
-import { ratioChange } from "../actions";
-import { connect } from "react-redux";
+import {getRatio} from '../utility/screen';
+import history from '../history';
+import MainApp from './main';
+import {ratioChange} from '../store/actions/web';
 
 interface Props {
   dispatchRatio: (ratio: number) => void;
@@ -13,16 +13,16 @@ interface Props {
 
 class App extends React.PureComponent<Props> {
   updateRatio = () => {
-    const { dispatchRatio } = this.props;
+    const {dispatchRatio} = this.props;
     dispatchRatio(getRatio());
   };
 
   componentDidMount() {
-    window.addEventListener("resize", this.updateRatio);
+    window.addEventListener('resize', this.updateRatio);
   }
 
   componentWillUnmount() {
-    window.removeEventListener("resize", this.updateRatio);
+    window.removeEventListener('resize', this.updateRatio);
   }
 
   render() {
@@ -39,6 +39,9 @@ class App extends React.PureComponent<Props> {
   }
 }
 
-export default connect(null, (dispatch: Dispatch<any>) => ({
-  dispatchRatio: (ratio: number) => dispatch(ratioChange(ratio))
-}))(App);
+export default connect(
+  null,
+  (dispatch: Dispatch<any>) => ({
+    dispatchRatio: (ratio: number) => dispatch(ratioChange(ratio)),
+  }),
+)(App);

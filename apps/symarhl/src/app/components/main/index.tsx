@@ -1,18 +1,18 @@
 import React, {Dispatch} from 'react';
-import {Container, Grid, AppBar, Toolbar} from '@material-ui/core';
+import {AppBar, Container, Grid, Toolbar} from '@material-ui/core';
 import NightsStayIcon from '@material-ui/icons/NightsStay';
 import PumpIcon from '../../icons/PumpIcon';
 import styles from '../../icons/styles';
 import Room from '../room';
 import {connect} from 'react-redux';
-import {StoreType} from '../../reducers';
-import {RoomsTemp, HomeState} from '../../interfaces';
-import {getHomeTemperature, getHomeState} from '../../actions';
+import {StoreType} from '../../store/reducers';
+import {HomeState, RoomTemp} from '@monorepo/core';
 import {isOn} from '../../utility/power';
+import {getHomeTemperature, getHomeState} from '../../store/actions/common';
 
 interface Props {
   isLandscape: boolean;
-  temperature: RoomsTemp;
+  temperature: RoomTemp;
   homeState: HomeState;
   fetchTemp: () => void;
   fetchHomeState: () => void;
@@ -21,7 +21,7 @@ interface Props {
 class ARoom {
   constructor(
     public name: string,
-    public temp: string,
+    public temp: number,
     public minTemp: number,
   ) {}
 }
@@ -48,8 +48,8 @@ class MainApp extends React.PureComponent<Props> {
     const {isLandscape, temperature, homeState} = this.props;
     const {variables, power} = homeState;
     const rooms: ARoom[] = Array.from(Object.entries(temperature)).map(
-      ([name, temp]) =>
-        new ARoom(name, temp, parseFloat((variables as any)[name])),
+      ([name, temp]: [keyof RoomTemp, number]) =>
+        new ARoom(name, temp, variables[name]),
     );
     return (
       <React.Fragment>
@@ -61,9 +61,7 @@ class MainApp extends React.PureComponent<Props> {
             />
             <NightsStayIcon
               style={
-                parseInt(variables.nightShift) > 0
-                  ? styles.enabled
-                  : styles.disabled
+                variables.nightShift > 0 ? styles.enabled : styles.disabled
               }
             />
           </Toolbar>

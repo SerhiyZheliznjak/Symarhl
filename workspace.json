@@ -15,11 +15,8 @@
             "main": "apps/symarhl/src/main.tsx",
             "polyfills": "apps/symarhl/src/polyfills.ts",
             "tsConfig": "apps/symarhl/tsconfig.app.json",
-            "assets": [
-              "apps/symarhl/src/favicon.ico",
-              "apps/symarhl/src/assets"
-            ],
-            "styles": ["apps/symarhl/src/styles.css"],
+            "assets": ["apps/symarhl/src/assets"],
+            "styles": ["apps/symarhl/src/main.css"],
             "scripts": [],
             "webpackConfig": "@nrwl/react/plugins/babel"
           },
