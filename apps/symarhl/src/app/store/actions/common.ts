@@ -21,7 +21,7 @@ export const setMinTemp = (room: string, temp: number) => async (
   dispatch: Dispatch,
 ) => {
   try {
-    console.log(`COMMON/SET/${room.toUpperCase()}`);
+    console.log(`COMMON/SET/${room.toUpperCase()} temp: ${temp}`);
     await heatingService.put('/temp', {
       room,
       temp: String(temp),
@@ -36,4 +36,7 @@ export type CommonActionType =
   | {type: typeof commonActions.variables; payload: Variables}
   | {type: typeof commonActions.homeTemp; payload: RoomTemp}
   | {type: typeof commonActions.homeState; payload: HomeState}
-  | {type: typeof commonActions.setBathromTemp; payload: string};
+  | {type: typeof commonActions.setStudioTemp; payload: string}
+  | {type: typeof commonActions.setBathromTemp; payload: string}
+  | {type: typeof commonActions.setKidsroomTemp; payload: string}
+  | {type: typeof commonActions.setBedroomTemp; payload: string};

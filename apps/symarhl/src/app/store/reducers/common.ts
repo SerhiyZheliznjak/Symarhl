@@ -21,6 +21,26 @@ export function variablesReducer(
       return {
         ...action.payload,
       };
+    case commonActions.setStudioTemp:
+      return {
+        ...state,
+        studio: action.payload,
+      };
+    case commonActions.setBathromTemp:
+      return {
+        ...state,
+        bathroom: action.payload,
+      };
+    case commonActions.setKidsroomTemp:
+      return {
+        ...state,
+        kidsroom: action.payload,
+      };
+    case commonActions.setBedroomTemp:
+      return {
+        ...state,
+        bedroom: action.payload,
+      };
     default:
       return state;
   }
@@ -41,11 +61,6 @@ export function tempReducer(
     case commonActions.homeTemp:
       return {
         ...action.payload,
-      };
-    case commonActions.setBathromTemp:
-      return {
-        ...state,
-        bathroom: action.payload,
       };
     default:
       return state;
