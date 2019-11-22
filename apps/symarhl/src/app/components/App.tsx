@@ -4,8 +4,9 @@ import {connect} from 'react-redux';
 
 import {getRatio} from '../utility/screen';
 import history from '../history';
-import MainApp from './main';
+import MainScreen from './screens/main';
 import {ratioChange} from '../store/actions/web';
+import SettingsScreen from './screens/settings';
 
 interface Props {
   dispatchRatio: (ratio: number) => void;
@@ -29,10 +30,12 @@ class App extends React.PureComponent<Props> {
     return (
       <React.Fragment>
         <Router history={history}>
-          <Switch>
-            <Route path="/" exact component={MainApp} />
-            {/* <Route path="/settings" component={StreamCreate} /> */}
-          </Switch>
+          <div>
+            <Switch>
+              <Route path="/" exact component={MainScreen} />
+              <Route path="/settings" component={SettingsScreen} />
+            </Switch>
+          </div>
         </Router>
       </React.Fragment>
     );

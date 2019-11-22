@@ -27,7 +27,7 @@ class ARoom {
   ) {}
 }
 
-class MainApp extends React.PureComponent<Props> {
+class MainScreen extends React.PureComponent<Props> {
   private interval;
 
   fetchData = () => {
@@ -52,7 +52,11 @@ class MainApp extends React.PureComponent<Props> {
     );
     return (
       <React.Fragment>
-        <AppBar position="static" color="default">
+        <AppBar
+          position="static"
+          color="default"
+          style={{marginBottom: '20px'}}
+        >
           <Toolbar>
             <PumpIcon
               fontSize="small"
@@ -66,7 +70,7 @@ class MainApp extends React.PureComponent<Props> {
           </Toolbar>
         </AppBar>
         <Container maxWidth="lg">
-          <Grid container justify="space-around" spacing={2}>
+          <Grid container justify="flex-start" spacing={2}>
             {rooms.map(({name, temp, minTemp, power}) => (
               <Room
                 key={name}
@@ -94,4 +98,4 @@ export default connect(
   (dispatch: Dispatch<any>) => ({
     fetchHomeState: () => dispatch(getHomeState()),
   }),
-)(MainApp);
+)(MainScreen);

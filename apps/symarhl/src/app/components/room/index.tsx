@@ -1,5 +1,5 @@
 import React from 'react';
-import {Grid, Paper, Typography} from '@material-ui/core';
+import {Grid, Paper, Typography, Box} from '@material-ui/core';
 import Temperature from '../temperature';
 import FloorIcon from '../../icons/FloorIcon';
 import {PowerValue} from '@monorepo/core';
@@ -29,28 +29,47 @@ class Room extends React.PureComponent<Props> {
   render() {
     const {name, isLandscape, temp, minTemp, power} = this.props;
     return (
-      <Grid item xs={isLandscape ? 3 : 6}>
-        <Paper>
-          <Grid container direction="row">
-            <Grid item xs={8}>
-              <Grid container direction="row" justify="center" spacing={3}>
-                <Grid item xs={12}>
-                  <Typography variant="h5" component="h3">
-                    {name}
-                  </Typography>
+      <Grid item xs={isLandscape ? 4 : 6} style={{height: '200px'}}>
+        <Paper style={{height: '100%'}}>
+          <Grid
+            container
+            direction="row"
+            justify="center"
+            style={{height: '100%'}}
+          >
+            <Grid item xs={12}>
+              <Typography variant="h5" component="h3">
+                {name}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} style={{height: '100%'}}>
+              <Grid
+                container
+                direction="row"
+                justify="center"
+                style={{height: '100%'}}
+              >
+                <Grid item xs={6}>
+                  <Grid
+                    container
+                    direction="column"
+                    justify="space-around"
+                    style={{height: '100%'}}
+                  >
+                    <Grid item>{this.renderTemp(temp)}</Grid>
+                    <Grid item>
+                      <FloorIcon
+                        color={
+                          isOn((power as any)[name]) ? 'error' : 'disabled'
+                        }
+                      />
+                    </Grid>
+                  </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                  {this.renderTemp(temp)}
-                </Grid>
-                <Grid item xs={12}>
-                  <FloorIcon
-                    color={isOn((power as any)[name]) ? 'error' : 'disabled'}
-                  />
+                <Grid item xs={6}>
+                  <Temperature room={name} minTemp={minTemp} />
                 </Grid>
               </Grid>
-            </Grid>
-            <Grid item xs={4}>
-              <Temperature room={name} temperature={minTemp} />
             </Grid>
           </Grid>
         </Paper>

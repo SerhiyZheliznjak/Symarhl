@@ -4,6 +4,7 @@
   "license": "MIT",
   "scripts": {
     "nx": "nx",
+    "try": "yarn build:web && yarn push",
     "start": "nx serve symarhl --watch --liveReload",
     "deploy": "yarn build && yarn push",
     "build": "yarn build:api && yarn build:web && yarn build:web-server",

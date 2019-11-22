@@ -1,21 +1,35 @@
 import React, {Dispatch} from 'react';
-import {Grid, IconButton, Typography} from '@material-ui/core';
+import {Grid, Button, Typography} from '@material-ui/core';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import {connect} from 'react-redux';
 import debounce from 'lodash/debounce';
 import {setMinTemp} from '../../store/actions/common';
+import {NO_READINGS} from '@monorepo/core';
 
 interface Props {
   room: string;
-  temperature: number;
+  minTemp: number;
   doSetMinTemp: (room: string, temp: number) => void;
 }
 
 class Temperature extends React.PureComponent<Props> {
+  state = {
+    temp: +this.props.minTemp,
+  };
+
+  componentWillUpdate(nextProps) {
+    if (this.props.minTemp === NO_READINGS && nextProps.minTemp !== NO_READINGS)
+      this.setState({temp: nextProps.minTemp});
+  }
+
   tickTemp(shift: number) {
-    const {room, temperature, doSetMinTemp} = this.props;
-    doSetMinTemp(room, +temperature + shift);
+    const {room, doSetMinTemp} = this.props;
+    const {temp} = this.state;
+    const ticked = temp + shift;
+    this.setState({temp: ticked});
+
+    doSetMinTemp(room, ticked);
   }
 
   onTempUp = () => {
@@ -26,18 +40,29 @@ class Temperature extends React.PureComponent<Props> {
   };
 
   render() {
-    const {temperature} = this.props;
+    const {temp} = this.state;
     return (
-      <Grid direction="column" container item xs>
-        <IconButton onClick={this.onTempUp}>
-          <KeyboardArrowUpIcon />
-        </IconButton>
-        <Typography variant="h5" component="h3">
-          {isNaN(temperature) ? '' : temperature}
-        </Typography>
-        <IconButton onClick={this.onTempDown}>
-          <KeyboardArrowDownIcon />
-        </IconButton>
+      <Grid
+        direction="column"
+        container
+        justify="center"
+        style={{height: '100%', border: '1px solid red'}}
+      >
+        <Grid item>
+          <Button onClick={this.onTempUp} color="secondary">
+            <KeyboardArrowUpIcon />
+          </Button>
+        </Grid>
+        <Grid item>
+          <Typography variant="subtitle1" component="p">
+            {isNaN(temp) ? '' : temp}
+          </Typography>
+        </Grid>
+        <Grid item>
+          <Button onClick={this.onTempDown} color="primary">
+            <KeyboardArrowDownIcon />
+          </Button>
+        </Grid>
       </Grid>
     );
   }
@@ -46,9 +71,8 @@ class Temperature extends React.PureComponent<Props> {
 export default connect(
   null,
   (dispatch: Dispatch<any>) => ({
-    doSetMinTemp: debounce(
-      (room: string, temp: number) => dispatch(setMinTemp(room, temp)),
-      500,
-    ),
+    doSetMinTemp: debounce((room: string, temp: number) => {
+      dispatch(setMinTemp(room, temp));
+    }, 500),
   }),
 )(Temperature);
