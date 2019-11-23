@@ -5,8 +5,10 @@ import {
   Room,
   HomeState,
   PowerValue,
+  Variables,
 } from '@monorepo/core';
-import {setTemp, setPower, setVariable} from '@monorepo/store';
+import {setTemp, setPower, setVariable, getState} from '@monorepo/store';
+import {mqttService} from '@monorepo/mqtt';
 
 const stripSet = (setTopic: RequestSetTopic | string) =>
   setTopic.split('set/')[1];
@@ -47,5 +49,22 @@ export const handleMessage = (topic: Topic, payload: string) => {
       ];
       setVariable(key, parseFloat(val));
       break;
+    case ReadTopic.started:
+      setAllVariables();
+      break;
   }
 };
+
+function setAllVariables() {
+  const {variables} = getState();
+  Object.keys(variables).forEach((variable: keyof Variables, i: number) => {
+    setTimeout(
+      () =>
+        mqttService.setVariableValue(
+          `set/${variable}` as RequestSetTopic,
+          String(variables[variable]),
+        ),
+      i * 300,
+    );
+  });
+}

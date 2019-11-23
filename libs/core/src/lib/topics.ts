@@ -5,6 +5,7 @@ export enum ReadTopic {
   bedroom = 'temp/bedroom',
   power = 'power',
   variables = 'variables',
+  started = 'started',
 }
 
 export enum RequestGetTopic {

@@ -2,7 +2,6 @@ import {createServer} from 'http';
 import * as debugLogger from 'debug';
 import {mqttService} from '@monorepo/mqtt';
 
-import {startScheduler} from './utils/nightShift';
 import {handleMessage} from './utils/messageHandler';
 import {environment} from './environments/environment';
 import {app} from './app';
@@ -43,5 +42,4 @@ server.on('listening', () => {
   const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
   debug('Listening on ' + bind);
   mqttService.connect(environment.mqttBroker, handleMessage);
-  startScheduler();
 });
