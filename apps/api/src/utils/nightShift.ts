@@ -1,9 +1,10 @@
-const {getSunrise, getSunset} = require('sunrise-sunset-js');
 const {scheduleJob} = require('node-schedule');
-import {RequestSetTopic} from '@monorepo/core';
+import {RequestSetTopic, Room} from '@monorepo/core';
 import {mqttService} from '@monorepo/mqtt';
+import {getState, setNightTemp, delNightTemp} from '@monorepo/store';
 
-const homeLocation = [49.827896, 23.987235];
+let morningJob;
+let eveningJob;
 
 function getTomorrow(today: Date): Date {
   const tomorrow = new Date();
@@ -11,55 +12,74 @@ function getTomorrow(today: Date): Date {
   return tomorrow;
 }
 
-function getHomeSunrise(date: Date): Date {
-  const [lat, long] = homeLocation;
-  return getSunrise(lat, long, date);
-}
-
-function getHomeSunset(date: Date): Date {
-  const [lat, long] = homeLocation;
-  return getSunset(lat, long, date);
+function queueShift(topic: RequestSetTopic, temp: string) {
+  setTimeout(() => mqttService.setVariableValue(topic, temp), 500);
 }
 
 function setDayShift() {
-  mqttService.setVariableValue(RequestSetTopic.nightShift, '0.00');
+  const {variables, nightShift} = getState();
+  Array.from(nightShift.at.entries()).forEach(([room]) => {
+    queueShift(RequestSetTopic[room], String(variables[room]));
+  });
 }
 
 function setNightShift() {
-  mqttService.setVariableValue(RequestSetTopic.nightShift, '1.00');
+  const {nightShift} = getState();
+  Array.from(nightShift.at.entries()).forEach(([room, nightTemp]) => {
+    queueShift(RequestSetTopic[room], String(nightTemp));
+  });
 }
 
-function scheduleDayShift(today: Date) {
-  const sunrise = getHomeSunrise(today);
-  scheduleJob(sunrise, () => {
+function scheduleDayShift(tomorrow: Date) {
+  const date = new Date(tomorrow.getTime());
+  const {morning} = getState().nightShift;
+  date.setHours(morning, 0, 0);
+  morningJob = scheduleJob(date, () => {
     setDayShift();
-    scheduleNightShift(today);
+    scheduleNightShift(date);
   });
 }
 
 function scheduleNightShift(today: Date) {
-  const tomorrow = getTomorrow(today);
-  const todaySunset = getHomeSunset(today);
+  const date = new Date(today.getTime());
+  const {evening} = getState().nightShift;
+  date.setHours(evening, 0, 0);
 
-  scheduleJob(todaySunset, () => {
+  eveningJob = scheduleJob(date, () => {
     setNightShift();
-    scheduleDayShift(tomorrow);
+    scheduleDayShift(getTomorrow(date));
   });
 }
 
-export function startScheduler() {
+export function startScheduler(room: Room, nigthTemp: number) {
   const now = new Date();
-  const sunrise = getHomeSunrise(now);
-  const sunset = getHomeSunset(now);
-
-  if (now < sunrise) {
-    scheduleDayShift(now);
-    setNightShift();
-  } else if (now < sunset) {
-    scheduleNightShift(now);
-    setDayShift();
+  const {nightShift, variables} = getState();
+  const {evening, morning} = nightShift;
+  setNightTemp(room, nigthTemp);
+  if (now.getHours() < morning) {
+    if (!morningJob) scheduleDayShift(now);
+    mqttService.setVariableValue(RequestSetTopic[room], String(nigthTemp));
+  } else if (now.getHours() < evening) {
+    if (!eveningJob) scheduleNightShift(now);
+    mqttService.setVariableValue(
+      RequestSetTopic[room],
+      String(variables[room]),
+    );
   } else {
-    scheduleDayShift(getTomorrow(now));
-    setNightShift();
+    if (!morningJob) scheduleDayShift(getTomorrow(now));
+    mqttService.setVariableValue(RequestSetTopic[room], String(nigthTemp));
+  }
+}
+
+export function stopScheduler(room: Room) {
+  if (delNightTemp(room) < 1) {
+    if (morningJob) {
+      morningJob.cancel();
+      morningJob = null;
+    }
+    if (eveningJob) {
+      eveningJob.cancel();
+      eveningJob = null;
+    }
   }
 }

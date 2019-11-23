@@ -12,7 +12,6 @@ export enum RequestGetTopic {
 }
 
 export enum RequestSetTopic {
-  nightShift = 'set/nightShift',
   hysteresis = 'set/hysteresis',
   interval = 'set/interval',
   studio = 'set/studio',

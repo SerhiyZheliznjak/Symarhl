@@ -19,9 +19,11 @@ class Room extends React.PureComponent<Props> {
     if (val === -127) {
       return <ErrorIcon color="error" />;
     }
+
+    const roundedVal = Math.round(val * 10) / 10;
     return (
       <Typography variant="h5" component="h3">
-        {`${val}° C`}
+        {`${roundedVal}° C`}
       </Typography>
     );
   }

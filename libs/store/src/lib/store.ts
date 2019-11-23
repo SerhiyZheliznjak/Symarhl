@@ -15,7 +15,6 @@ const homeState: HomeState = {
     bedroom: NO_READINGS,
     interval: NO_READINGS,
     hysteresis: NO_READINGS,
-    nightShift: NO_READINGS,
   },
   power: {
     pump: '-1',
@@ -24,6 +23,11 @@ const homeState: HomeState = {
     bathroom: '-1',
     kidsroom: '-1',
     bedroom: '-1',
+  },
+  nightShift: {
+    at: new Map(),
+    morning: 7,
+    evening: 21,
   },
 };
 
@@ -50,4 +54,18 @@ export function setTemp(room: Room, temp: number) {
 
 export function getState() {
   return homeState;
+}
+
+export function setDayNightSchedule(morning = 7, evening = 21) {
+  homeState.nightShift = {...homeState.nightShift, morning, evening};
+}
+
+export function setNightTemp(room: Room, nightTemp: number) {
+  homeState.nightShift.at.set(room, nightTemp);
+}
+
+export function delNightTemp(room: Room): number {
+  const {nightShift} = homeState;
+  nightShift.at.delete(room);
+  return nightShift.at.size;
 }

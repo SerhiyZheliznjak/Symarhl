@@ -1,3 +1,5 @@
+import {Room} from './Rooms';
+
 export type PowerValue = '-1' | '0' | '1';
 
 export interface RoomTemp {
@@ -10,7 +12,6 @@ export interface RoomTemp {
 export interface Variables extends RoomTemp {
   interval: number;
   hysteresis: number;
-  nightShift: number;
 }
 
 export interface Power {
@@ -26,6 +27,11 @@ export interface HomeState {
   temp: RoomTemp;
   variables: Variables;
   power: Power;
+  nightShift: {
+    at: Map<Room, number>;
+    morning: number;
+    evening: number;
+  };
 }
 
 export const NO_READINGS = -127;
