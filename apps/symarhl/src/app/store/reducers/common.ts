@@ -9,7 +9,6 @@ const INITIAL_VARIABLES_STATE: Variables = {
   bedroom: NO_READINGS,
   hysteresis: NO_READINGS,
   interval: NO_READINGS,
-  nightShift: NO_READINGS,
 };
 
 export function variablesReducer(

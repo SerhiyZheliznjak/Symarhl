@@ -62,11 +62,11 @@ class MainScreen extends React.PureComponent<Props> {
               fontSize="small"
               style={isOn(power.pump) ? styles.enabled : styles.disabled}
             />
-            <NightsStayIcon
+            {/* <NightsStayIcon
               style={
                 variables.nightShift > 0 ? styles.enabled : styles.disabled
               }
-            />
+            /> */}
           </Toolbar>
         </AppBar>
         <Container maxWidth="lg">

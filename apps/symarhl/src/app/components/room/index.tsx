@@ -60,11 +60,7 @@ class Room extends React.PureComponent<Props> {
                   >
                     <Grid item>{this.renderTemp(temp)}</Grid>
                     <Grid item>
-                      <FloorIcon
-                        color={
-                          isOn((power as any)[name]) ? 'error' : 'disabled'
-                        }
-                      />
+                      <FloorIcon color={isOn(power) ? 'error' : 'disabled'} />
                     </Grid>
                   </Grid>
                 </Grid>
