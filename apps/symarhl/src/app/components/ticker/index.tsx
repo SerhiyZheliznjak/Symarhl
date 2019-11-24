@@ -13,7 +13,7 @@ interface Props {
   doSetMinTemp: (room: string, temp: number) => void;
 }
 
-class Temperature extends React.PureComponent<Props> {
+class Ticker extends React.PureComponent<Props> {
   state = {
     temp: +this.props.minTemp,
   };
@@ -45,8 +45,9 @@ class Temperature extends React.PureComponent<Props> {
       <Grid
         direction="column"
         container
-        justify="center"
-        style={{height: '100%', border: '1px solid red'}}
+        justify="space-around"
+        style={{height: '100%'}}
+        alignItems="center"
       >
         <Grid item>
           <Button onClick={this.onTempUp} color="secondary">
@@ -75,4 +76,4 @@ export default connect(
       dispatch(setMinTemp(room, temp));
     }, 500),
   }),
-)(Temperature);
+)(Ticker);

@@ -1,10 +1,11 @@
 import React from 'react';
 import {Grid, Paper, Typography, Box} from '@material-ui/core';
-import Temperature from '../temperature';
+import Ticker from '../ticker';
 import FloorIcon from '../../icons/FloorIcon';
 import {PowerValue} from '@monorepo/core';
 import {isOn} from '../../utility/power';
 import ErrorIcon from '@material-ui/icons/Error';
+import capitalize from 'lodash/capitalize';
 
 interface Props {
   name: string;
@@ -40,11 +41,11 @@ class Room extends React.PureComponent<Props> {
             style={{height: '100%'}}
           >
             <Grid item xs={12}>
-              <Typography variant="h5" component="h3">
-                {name}
+              <Typography variant="h5" component="h3" align="center">
+                {capitalize(name)}
               </Typography>
             </Grid>
-            <Grid item xs={12} style={{height: '100%'}}>
+            <Grid item xs={12}>
               <Grid
                 container
                 direction="row"
@@ -65,7 +66,7 @@ class Room extends React.PureComponent<Props> {
                   </Grid>
                 </Grid>
                 <Grid item xs={6}>
-                  <Temperature room={name} minTemp={minTemp} />
+                  <Ticker room={name} minTemp={minTemp} />
                 </Grid>
               </Grid>
             </Grid>
