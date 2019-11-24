@@ -1,14 +1,14 @@
 import React, {Dispatch} from 'react';
 import {AppBar, Container, Grid, Toolbar} from '@material-ui/core';
 import NightsStayIcon from '@material-ui/icons/NightsStay';
-import PumpIcon from '../../icons/PumpIcon';
-import styles from '../../icons/styles';
-import Room from '../room';
+import PumpIcon from '../../common/icons/PumpIcon';
+import styles from '../../common/icons/styles';
+import Room from './components/room';
 import {connect} from 'react-redux';
-import {StoreType} from '../../store/reducers';
+import {StoreType} from '../../../store/reducers';
 import {RoomTemp, Variables, Power, PowerValue} from '@monorepo/core';
-import {isOn} from '../../utility/power';
-import {getHomeState} from '../../store/actions/common';
+import {isOn} from '../../../utility/power';
+import {getHomeState} from '../../../store/actions/common';
 
 interface Props {
   isLandscape: boolean;

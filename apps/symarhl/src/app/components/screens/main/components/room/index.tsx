@@ -1,9 +1,9 @@
 import React from 'react';
 import {Grid, Paper, Typography, Box} from '@material-ui/core';
-import Ticker from '../ticker';
-import FloorIcon from '../../icons/FloorIcon';
+import Ticker from '../../../../common/ticker';
+import FloorIcon from '../../../../common/icons/FloorIcon';
 import {PowerValue} from '@monorepo/core';
-import {isOn} from '../../utility/power';
+import {isOn} from '../../../../../utility/power';
 import ErrorIcon from '@material-ui/icons/Error';
 import capitalize from 'lodash/capitalize';
 

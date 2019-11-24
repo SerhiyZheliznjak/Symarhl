@@ -4,7 +4,7 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import {connect} from 'react-redux';
 import debounce from 'lodash/debounce';
-import {setMinTemp} from '../../store/actions/common';
+import {setMinTemp} from '../../../store/actions/common';
 import {NO_READINGS} from '@monorepo/core';
 
 interface Props {
