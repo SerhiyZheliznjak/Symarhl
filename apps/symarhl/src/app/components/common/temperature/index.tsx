@@ -16,7 +16,7 @@ class Temperature extends React.PureComponent<Props> {
     const roundedVal = Math.round(val * 10) / 10;
     return (
       <Typography variant="h5" component="h3">
-        {`${roundedVal}°C`}
+        {`${roundedVal}°`}
       </Typography>
     );
   }
