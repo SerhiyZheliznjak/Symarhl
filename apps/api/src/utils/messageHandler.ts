@@ -12,7 +12,7 @@ import {mqttService} from '@monorepo/mqtt';
 import {setCurrentShift} from './nightShift';
 
 const stripSet = (setTopic: RequestSetTopic | string) =>
-  setTopic.split('set/')[1];
+  setTopic.split('set/')[1] as keyof Variables;
 
 const parsePayload = (payload: string) =>
   payload.split(';').map(keyVal => keyVal.split('='));
@@ -31,6 +31,9 @@ export const handleMessage = (topic: Topic, payload: string) => {
     case ReadTopic.bedroom:
       setTemp(Room.bedroom, parseFloat(payload));
       break;
+    case ReadTopic.outdoor:
+      setTemp(Room.outdoor, parseFloat(payload));
+      break;
     case ReadTopic.power:
       parsePayload(payload).forEach(
         ([topic, value]: [keyof HomeState['power'], PowerValue]) =>
@@ -40,7 +43,7 @@ export const handleMessage = (topic: Topic, payload: string) => {
     case ReadTopic.variables:
       parsePayload(payload).forEach(
         ([topic, value]: [RequestSetTopic, string]) =>
-          setVariable(stripSet(topic) as Room, parseFloat(value)),
+          setVariable(stripSet(topic), parseFloat(value)),
       );
       break;
     case RequestSetTopic.confirmed:

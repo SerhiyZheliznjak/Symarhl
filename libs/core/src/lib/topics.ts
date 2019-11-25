@@ -3,6 +3,7 @@ export enum ReadTopic {
   bathroom = 'temp/bathroom',
   kidsroom = 'temp/kidsroom',
   bedroom = 'temp/bedroom',
+  outdoor = 'temp/outdoor',
   power = 'power',
   variables = 'variables',
   started = 'started',

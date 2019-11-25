@@ -3,4 +3,5 @@ export enum Room {
   bathroom = 'bathroom',
   kidsroom = 'kidsroom',
   bedroom = 'bedroom',
+  outdoor = 'outdoor',
 }
