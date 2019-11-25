@@ -50,6 +50,7 @@ const INITIAL_TEMP_STATE: RoomTemp = {
   bathroom: NO_READINGS,
   kidsroom: NO_READINGS,
   bedroom: NO_READINGS,
+  outdoor: NO_READINGS,
 };
 
 export function tempReducer(

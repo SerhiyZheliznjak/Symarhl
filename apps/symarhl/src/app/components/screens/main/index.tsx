@@ -1,14 +1,11 @@
 import React, {Dispatch} from 'react';
-import {AppBar, Container, Grid, Toolbar} from '@material-ui/core';
-import NightsStayIcon from '@material-ui/icons/NightsStay';
-import PumpIcon from '../../common/icons/PumpIcon';
-import styles from '../../common/icons/styles';
+import {Container, Grid} from '@material-ui/core';
 import Room from './components/room';
 import {connect} from 'react-redux';
 import {StoreType} from '../../../store/reducers';
 import {RoomTemp, Variables, Power, PowerValue} from '@monorepo/core';
-import {isOn} from '../../../utility/power';
 import {getHomeState} from '../../../store/actions/common';
+import Header from './components/header';
 
 interface Props {
   isLandscape: boolean;
@@ -46,29 +43,15 @@ class MainScreen extends React.PureComponent<Props> {
 
   render() {
     const {isLandscape, temperature, power, variables} = this.props;
-    const rooms: ARoom[] = Array.from(Object.entries(temperature)).map(
-      ([name, temp]: [keyof RoomTemp, number]) =>
-        new ARoom(name, temp, variables[name], power[name]),
-    );
+    const rooms: ARoom[] = Array.from(Object.entries(temperature))
+      .filter(([name]) => name !== 'outdoor')
+      .map(
+        ([name, temp]: [keyof RoomTemp, number]) =>
+          new ARoom(name, temp, variables[name], power[name]),
+      );
     return (
       <React.Fragment>
-        <AppBar
-          position="static"
-          color="default"
-          style={{marginBottom: '20px'}}
-        >
-          <Toolbar>
-            <PumpIcon
-              fontSize="small"
-              style={isOn(power.pump) ? styles.enabled : styles.disabled}
-            />
-            {/* <NightsStayIcon
-              style={
-                variables.nightShift > 0 ? styles.enabled : styles.disabled
-              }
-            /> */}
-          </Toolbar>
-        </AppBar>
+        <Header pumpPower={power.pump} outdoorTemp={temperature.outdoor} />
         <Container maxWidth="lg">
           <Grid container justify="flex-start" spacing={2}>
             {rooms.map(({name, temp, minTemp, power}) => (

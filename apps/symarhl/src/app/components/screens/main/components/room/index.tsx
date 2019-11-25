@@ -4,8 +4,9 @@ import Ticker from '../../../../common/ticker';
 import FloorIcon from '../../../../common/icons/FloorIcon';
 import {PowerValue} from '@monorepo/core';
 import {isOn} from '../../../../../utility/power';
-import ErrorIcon from '@material-ui/icons/Error';
+
 import capitalize from 'lodash/capitalize';
+import Temperature from '../../../../common/temperature';
 
 interface Props {
   name: string;
@@ -16,19 +17,6 @@ interface Props {
 }
 
 class Room extends React.PureComponent<Props> {
-  renderTemp(val: number) {
-    if (val === -127) {
-      return <ErrorIcon color="error" />;
-    }
-
-    const roundedVal = Math.round(val * 10) / 10;
-    return (
-      <Typography variant="h5" component="h3">
-        {`${roundedVal}° C`}
-      </Typography>
-    );
-  }
-
   render() {
     const {name, isLandscape, temp, minTemp, power} = this.props;
     return (
@@ -59,7 +47,9 @@ class Room extends React.PureComponent<Props> {
                     justify="space-around"
                     style={{height: '100%'}}
                   >
-                    <Grid item>{this.renderTemp(temp)}</Grid>
+                    <Grid item>
+                      <Temperature val={temp} />
+                    </Grid>
                     <Grid item>
                       <FloorIcon color={isOn(power) ? 'error' : 'disabled'} />
                     </Grid>
