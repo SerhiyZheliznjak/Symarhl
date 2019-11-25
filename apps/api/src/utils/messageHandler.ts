@@ -9,6 +9,7 @@ import {
 } from '@monorepo/core';
 import {setTemp, setPower, setVariable, getState} from '@monorepo/store';
 import {mqttService} from '@monorepo/mqtt';
+import {setCurrentShift} from './nightShift';
 
 const stripSet = (setTopic: RequestSetTopic | string) =>
   setTopic.split('set/')[1];
@@ -51,6 +52,7 @@ export const handleMessage = (topic: Topic, payload: string) => {
       break;
     case ReadTopic.started:
       setAllVariables();
+      setCurrentShift();
       break;
   }
 };

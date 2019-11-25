@@ -51,15 +51,16 @@ function scheduleNightShift(today: Date) {
   });
 }
 
-export function startScheduler(room: Room, nigthTemp: number) {
+export function startScheduler(room: Room, nigthtTemp: number) {
   const now = new Date();
   const {nightShift, variables} = getState();
   const {evening, morning} = nightShift;
-  setNightTemp(room, nigthTemp);
-  if (now.getHours() < morning) {
+  setNightTemp(room, nigthtTemp);
+  const currentHour = now.getHours();
+  if (currentHour < morning) {
     if (!morningJob) scheduleDayShift(now);
-    mqttService.setVariableValue(RequestSetTopic[room], String(nigthTemp));
-  } else if (now.getHours() < evening) {
+    mqttService.setVariableValue(RequestSetTopic[room], String(nigthtTemp));
+  } else if (currentHour < evening) {
     if (!eveningJob) scheduleNightShift(now);
     mqttService.setVariableValue(
       RequestSetTopic[room],
@@ -67,7 +68,25 @@ export function startScheduler(room: Room, nigthTemp: number) {
     );
   } else {
     if (!morningJob) scheduleDayShift(getTomorrow(now));
-    mqttService.setVariableValue(RequestSetTopic[room], String(nigthTemp));
+    mqttService.setVariableValue(RequestSetTopic[room], String(nigthtTemp));
+  }
+}
+
+export function setCurrentShift() {
+  const {morning, evening, at} = getState().nightShift;
+  const now = new Date();
+  const currentHour = now.getHours();
+  if (currentHour < morning || currentHour > evening) {
+    at.forEach((nightTemp: number, room: Room) =>
+      mqttService.setVariableValue(RequestSetTopic[room], String(nightTemp)),
+    );
+  } else {
+    at.forEach((_: number, room: Room) =>
+      mqttService.setVariableValue(
+        RequestSetTopic[room],
+        String(getState().variables[room]),
+      ),
+    );
   }
 }
 
