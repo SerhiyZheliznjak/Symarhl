@@ -7,9 +7,14 @@ export interface RoomTemp {
   bathroom: number;
   kidsroom: number;
   bedroom: number;
+  outdoor: number;
 }
 
-export interface Variables extends RoomTemp {
+export interface Variables {
+  studio: number;
+  bathroom: number;
+  kidsroom: number;
+  bedroom: number;
   interval: number;
   hysteresis: number;
 }

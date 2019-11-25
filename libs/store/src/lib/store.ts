@@ -7,6 +7,7 @@ const homeState: HomeState = {
     bathroom: NO_READINGS,
     bedroom: NO_READINGS,
     kidsroom: NO_READINGS,
+    outdoor: NO_READINGS,
   },
   variables: {
     studio: NO_READINGS,
