@@ -1,6 +1,6 @@
 import React from 'react';
 import {Typography} from '@material-ui/core';
-import ErrorIcon from '@material-ui/icons/Error';
+import ErrorIcon from '../icons/Error';
 
 interface Props {
   val: number;

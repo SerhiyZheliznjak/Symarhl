@@ -8,7 +8,6 @@ import Temperature from '../../../../common/temperature';
 import AcUnitIcon from '@material-ui/icons/AcUnit';
 import WbSunnyIcon from '@material-ui/icons/WbSunny';
 import WbCloudyIcon from '@material-ui/icons/WbCloudy';
-// import NightsStayIcon from '@material-ui/icons/NightsStay';
 
 interface Props {
   pumpPower: PowerValue;
