@@ -7,6 +7,7 @@ import history from '../history';
 import MainScreen from './screens/main';
 import {ratioChange} from '../store/actions/web';
 import SettingsScreen from './screens/settings';
+import IconsDemo from './common/icons';
 
 interface Props {
   dispatchRatio: (ratio: number) => void;
@@ -34,6 +35,7 @@ class App extends React.PureComponent<Props> {
             <Switch>
               <Route path="/" exact component={MainScreen} />
               <Route path="/settings" component={SettingsScreen} />
+              <Route path="/icons" component={IconsDemo} />
             </Switch>
           </div>
         </Router>

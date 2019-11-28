@@ -2,7 +2,7 @@ import React from 'react';
 import {SvgIcon} from '@material-ui/core';
 import {SvgIconProps} from '@material-ui/core/SvgIcon';
 
-export default ({...props}: SvgIconProps) => {
+export default (props: SvgIconProps) => {
   return (
     <SvgIcon {...props}>
       <path d="M 8.632812 0 L 3.601562 5.035156 L 3.601562 24 L 20.398438 24 L 20.398438 0 Z M 8.398438 1.367188 L 8.398438 4.800781 L 4.964844 4.800781 Z M 19.601562 23.199219 L 4.398438 23.199219 L 4.398438 5.601562 L 9.199219 5.601562 L 9.199219 0.800781 L 19.601562 0.800781 Z M 19.601562 23.199219 " />
