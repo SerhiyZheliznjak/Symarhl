@@ -6,6 +6,7 @@ import {
   HomeState,
   PowerValue,
   Variables,
+  NO_READINGS,
 } from '@monorepo/core';
 import {setTemp, setPower, setVariable, getState} from '@monorepo/store';
 import {mqttService} from '@monorepo/mqtt';
@@ -63,13 +64,15 @@ export const handleMessage = (topic: Topic, payload: string) => {
 function setAllVariables() {
   const {variables} = getState();
   Object.keys(variables).forEach((variable: keyof Variables, i: number) => {
-    setTimeout(
-      () =>
-        mqttService.setVariableValue(
-          `set/${variable}` as RequestSetTopic,
-          String(variables[variable]),
-        ),
-      i * 300,
-    );
+    const value = variables[variable];
+    if (value !== NO_READINGS)
+      setTimeout(
+        () =>
+          mqttService.setVariableValue(
+            `set/${variable}` as RequestSetTopic,
+            String(value),
+          ),
+        i * 300,
+      );
   });
 }
