@@ -24,12 +24,7 @@ class IconsDemo extends React.PureComponent {
           {icons.map((Icon: React.FC, i) => (
             <Grid key={i} item xs={2}>
               <Typography>{Icon.displayName}</Typography>
-              <Icon color="disabled" />
-            </Grid>
-          ))}
-          {icons.map((Icon: React.FC, i) => (
-            <Grid key={i} item xs={2}>
-              <Icon color="error" />
+              <Icon />
             </Grid>
           ))}
         </Grid>
