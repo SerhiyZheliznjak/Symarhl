@@ -1,11 +1,6 @@
 import {connect, AsyncMqttClient} from 'async-mqtt';
 
-import {
-  RequestSetTopic,
-  Topic,
-  RequestGetTopic,
-  Variables,
-} from '@monorepo/core';
+import {RequestSetTopic, Topic, Variables} from '@monorepo/core';
 
 class MqttService {
   private client: AsyncMqttClient;
@@ -16,12 +11,6 @@ class MqttService {
     messageHandler: (topic: Topic, payload: string) => unknown,
   ) {
     this.client = connect(`tcp://${brokerAddress}`);
-    this.client.on('connect', () => {
-      setTimeout(
-        () => this.sendMessage(RequestGetTopic.variables, String(Date.now())),
-        1000,
-      );
-    });
     this.client.on('message', (topic: Topic, bytes: unknown) => {
       const payload = String(bytes);
       if (topic === RequestSetTopic.confirmed) {

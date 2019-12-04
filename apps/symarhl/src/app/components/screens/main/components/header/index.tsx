@@ -5,9 +5,7 @@ import PumpIcon from '../../../../common/icons/PumpIcon';
 import {isOn} from 'apps/symarhl/src/app/utility/power';
 import styles from '../../../../common/icons/styles';
 import Temperature from '../../../../common/temperature';
-import AcUnitIcon from '@material-ui/icons/AcUnit';
-import WbSunnyIcon from '@material-ui/icons/WbSunny';
-import WbCloudyIcon from '@material-ui/icons/WbCloudy';
+import Error from '../../../../common/icons/Error';
 
 interface Props {
   pumpPower: PowerValue;
@@ -17,11 +15,7 @@ interface Props {
 class Header extends React.PureComponent<Props> {
   getWeaterIcon() {
     const {outdoorTemp} = this.props;
-    return outdoorTemp > 16
-      ? WbSunnyIcon
-      : outdoorTemp > 2
-      ? WbCloudyIcon
-      : AcUnitIcon;
+    return outdoorTemp > 16 ? Error : outdoorTemp > 2 ? Error : Error;
   }
 
   render() {

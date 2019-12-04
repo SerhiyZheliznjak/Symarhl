@@ -1,11 +1,10 @@
 import React, {Dispatch} from 'react';
 import {Grid, Button, Typography} from '@material-ui/core';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import {connect} from 'react-redux';
 import debounce from 'lodash/debounce';
 import {setMinTemp} from '../../../store/actions/common';
 import {NO_READINGS} from '@monorepo/core';
+import Error from '../icons/Error';
 
 interface Props {
   room: string;
@@ -51,7 +50,7 @@ class Ticker extends React.PureComponent<Props> {
       >
         <Grid item>
           <Button onClick={this.onTempUp} color="secondary">
-            <KeyboardArrowUpIcon />
+            <Error />
           </Button>
         </Grid>
         <Grid item>
@@ -61,7 +60,7 @@ class Ticker extends React.PureComponent<Props> {
         </Grid>
         <Grid item>
           <Button onClick={this.onTempDown} color="primary">
-            <KeyboardArrowDownIcon />
+            <Error />
           </Button>
         </Grid>
       </Grid>
