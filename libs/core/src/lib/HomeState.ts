@@ -6,23 +6,19 @@ export type TempReadings = {
   [K in TempLocation]: number;
 };
 
-export interface Variables {
-  studio: number;
-  bathroom: number;
-  kidsroom: number;
-  bedroom: number;
-  interval: number;
-  hysteresis: number;
-}
+export type RoomNames = 'studio' | 'bathroom' | 'kidsroom' | 'bedroom';
 
-export interface Power {
-  pump: PowerValue;
-  wall: PowerValue;
-  studio: PowerValue;
-  bathroom: PowerValue;
-  kidsroom: PowerValue;
-  bedroom: PowerValue;
-}
+export type VariablesKeys = RoomNames | 'interval' | 'hysteresis';
+
+export type Variables = {
+  [K in VariablesKeys]: number;
+};
+
+type PowerKeys = 'pump' | 'wall' | RoomNames;
+
+export type Power = {
+  [K in PowerKeys]: PowerValue;
+};
 
 export interface HomeState {
   temp: TempReadings;

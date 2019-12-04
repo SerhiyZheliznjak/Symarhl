@@ -17,7 +17,7 @@ class Ticker extends React.PureComponent<Props> {
     temp: +this.props.minTemp,
   };
 
-  componentWillUpdate(nextProps) {
+  componentWillUpdate(nextProps: Props) {
     if (this.props.minTemp === NO_READINGS && nextProps.minTemp !== NO_READINGS)
       this.setState({temp: nextProps.minTemp});
   }

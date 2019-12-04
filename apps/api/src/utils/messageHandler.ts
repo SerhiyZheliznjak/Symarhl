@@ -59,7 +59,7 @@ export const handleMessage = (topic: Topic, payload: string) => {
       setVariable(key, parseFloat(val));
       break;
     case ReadTopic.started:
-      setAllVariables();
+      // setAllVariables();
       setCurrentShift();
       break;
   }

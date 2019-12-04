@@ -3,7 +3,13 @@ import {Container, Grid} from '@material-ui/core';
 import Room from './components/room';
 import {connect} from 'react-redux';
 import {StoreType} from '../../../store/reducers';
-import {TempReadings, Variables, Power, PowerValue} from '@monorepo/core';
+import {
+  TempReadings,
+  Variables,
+  Power,
+  PowerValue,
+  RoomTemp,
+} from '@monorepo/core';
 import {getHomeState} from '../../../store/actions/common';
 import Header from './components/header';
 
@@ -25,7 +31,7 @@ class ARoom {
 }
 
 class MainScreen extends React.PureComponent<Props> {
-  private interval;
+  private interval: NodeJS.Timeout;
 
   fetchData = () => {
     const {fetchHomeState} = this.props;
@@ -44,9 +50,9 @@ class MainScreen extends React.PureComponent<Props> {
   render() {
     const {isLandscape, temperature, power, variables} = this.props;
     const rooms: ARoom[] = Array.from(Object.entries(temperature))
-      .filter(([name]) => name !== 'outdoor')
+      .filter(([name]) => name in RoomTemp)
       .map(
-        ([name, temp]: [keyof TempReadings, number]) =>
+        ([name, temp]: [RoomTemp, number]) =>
           new ARoom(name, temp, variables[name], power[name]),
       );
     return (
