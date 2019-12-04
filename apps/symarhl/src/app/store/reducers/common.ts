@@ -1,6 +1,6 @@
 import {commonActions} from '../actions/types';
 import {CommonActionType} from '../actions/common';
-import {NO_READINGS, RoomTemp, Variables, Power} from '@monorepo/core';
+import {NO_READINGS, TempReadings, Variables, Power} from '@monorepo/core';
 
 const INITIAL_VARIABLES_STATE: Variables = {
   studio: NO_READINGS,
@@ -45,12 +45,13 @@ export function variablesReducer(
   }
 }
 
-const INITIAL_TEMP_STATE: RoomTemp = {
+const INITIAL_TEMP_STATE: TempReadings = {
   studio: NO_READINGS,
   bathroom: NO_READINGS,
   kidsroom: NO_READINGS,
   bedroom: NO_READINGS,
   outdoor: NO_READINGS,
+  water: NO_READINGS,
 };
 
 export function tempReducer(

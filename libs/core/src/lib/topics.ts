@@ -4,13 +4,10 @@ export enum ReadTopic {
   kidsroom = 'temp/kidsroom',
   bedroom = 'temp/bedroom',
   outdoor = 'temp/outdoor',
+  water = 'temp/water',
   power = 'power',
   variables = 'variables',
   started = 'started',
-}
-
-export enum RequestGetTopic {
-  variables = 'get/variables',
 }
 
 export enum RequestSetTopic {
@@ -23,4 +20,4 @@ export enum RequestSetTopic {
   confirmed = 'set/confirmation',
 }
 
-export type Topic = ReadTopic | RequestSetTopic | RequestGetTopic;
+export type Topic = ReadTopic | RequestSetTopic;

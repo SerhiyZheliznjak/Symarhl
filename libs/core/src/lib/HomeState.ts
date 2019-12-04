@@ -1,14 +1,10 @@
-import {Room} from './Rooms';
+import {TempLocation, RoomTemp} from './TempLocations';
 
 export type PowerValue = '-1' | '0' | '1';
 
-export interface RoomTemp {
-  studio: number;
-  bathroom: number;
-  kidsroom: number;
-  bedroom: number;
-  outdoor: number;
-}
+export type TempReadings = {
+  [K in TempLocation]: number;
+};
 
 export interface Variables {
   studio: number;
@@ -29,11 +25,11 @@ export interface Power {
 }
 
 export interface HomeState {
-  temp: RoomTemp;
+  temp: TempReadings;
   variables: Variables;
   power: Power;
   nightShift: {
-    at: Map<Room, number>;
+    at: Map<RoomTemp, number>;
     morning: number;
     evening: number;
   };

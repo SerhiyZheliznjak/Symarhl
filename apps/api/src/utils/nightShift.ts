@@ -1,10 +1,10 @@
-const {scheduleJob} = require('node-schedule');
-import {RequestSetTopic, Room} from '@monorepo/core';
+import {scheduleJob, Job} from 'node-schedule';
+import {RequestSetTopic, RoomTemp} from '@monorepo/core';
 import {mqttService} from '@monorepo/mqtt';
-import {getState, setNightTemp, delNightTemp} from '@monorepo/store';
+import {getState, logNightTemp, delNightTemp} from '@monorepo/store';
 
-let morningJob;
-let eveningJob;
+let morningJob: Job;
+let eveningJob: Job;
 
 function getTomorrow(today: Date): Date {
   const tomorrow = new Date();
@@ -51,11 +51,11 @@ function scheduleNightShift(today: Date) {
   });
 }
 
-export function startScheduler(room: Room, nigthtTemp: number) {
+export function startScheduler(room: RoomTemp, nigthtTemp: number) {
   const now = new Date();
   const {nightShift, variables} = getState();
   const {evening, morning} = nightShift;
-  setNightTemp(room, nigthtTemp);
+  logNightTemp(room, nigthtTemp);
   const currentHour = now.getHours();
   if (currentHour < morning) {
     if (!morningJob) scheduleDayShift(now);
@@ -77,11 +77,11 @@ export function setCurrentShift() {
   const now = new Date();
   const currentHour = now.getHours();
   if (currentHour < morning || currentHour > evening) {
-    at.forEach((nightTemp: number, room: Room) =>
+    at.forEach((nightTemp: number, room: RoomTemp) =>
       mqttService.setVariableValue(RequestSetTopic[room], String(nightTemp)),
     );
   } else {
-    at.forEach((_: number, room: Room) =>
+    at.forEach((_: number, room: RoomTemp) =>
       mqttService.setVariableValue(
         RequestSetTopic[room],
         String(getState().variables[room]),
@@ -90,7 +90,7 @@ export function setCurrentShift() {
   }
 }
 
-export function stopScheduler(room: Room) {
+export function stopScheduler(room: RoomTemp) {
   if (delNightTemp(room) < 1) {
     if (morningJob) {
       morningJob.cancel();

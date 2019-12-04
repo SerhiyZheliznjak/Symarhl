@@ -2,13 +2,14 @@ import {
   ReadTopic,
   RequestSetTopic,
   Topic,
-  Room,
+  RoomTemp,
   HomeState,
   PowerValue,
   Variables,
   NO_READINGS,
+  UtilityTemp,
 } from '@monorepo/core';
-import {setTemp, setPower, setVariable, getState} from '@monorepo/store';
+import {logTemp, logPower, setVariable, getState} from '@monorepo/store';
 import {mqttService} from '@monorepo/mqtt';
 import {setCurrentShift} from './nightShift';
 
@@ -21,24 +22,27 @@ const parsePayload = (payload: string) =>
 export const handleMessage = (topic: Topic, payload: string) => {
   switch (topic) {
     case ReadTopic.studio:
-      setTemp(Room.studio, parseFloat(payload));
+      logTemp(RoomTemp.studio, parseFloat(payload));
       break;
     case ReadTopic.bathroom:
-      setTemp(Room.bathroom, parseFloat(payload));
+      logTemp(RoomTemp.bathroom, parseFloat(payload));
       break;
     case ReadTopic.kidsroom:
-      setTemp(Room.kidsroom, parseFloat(payload));
+      logTemp(RoomTemp.kidsroom, parseFloat(payload));
       break;
     case ReadTopic.bedroom:
-      setTemp(Room.bedroom, parseFloat(payload));
+      logTemp(RoomTemp.bedroom, parseFloat(payload));
       break;
     case ReadTopic.outdoor:
-      setTemp(Room.outdoor, parseFloat(payload));
+      logTemp(UtilityTemp.outdoor, parseFloat(payload));
+      break;
+    case ReadTopic.water:
+      logTemp(UtilityTemp.water, parseFloat(payload));
       break;
     case ReadTopic.power:
       parsePayload(payload).forEach(
         ([topic, value]: [keyof HomeState['power'], PowerValue]) =>
-          setPower(topic, value),
+          logPower(topic, value),
       );
       break;
     case ReadTopic.variables:

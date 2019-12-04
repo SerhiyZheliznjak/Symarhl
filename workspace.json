@@ -268,6 +268,62 @@
           }
         }
       }
+    },
+    "db": {
+      "root": "apps/db",
+      "sourceRoot": "apps/db/src",
+      "projectType": "application",
+      "prefix": "db",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/db",
+            "main": "apps/db/src/main.ts",
+            "tsConfig": "apps/db/tsconfig.app.json",
+            "assets": ["apps/db/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/db/src/environments/environment.ts",
+                  "with": "apps/db/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "db:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "config": "apps/db/.eslintrc",
+            "tsConfig": [
+              "apps/db/tsconfig.app.json",
+              "apps/db/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/db/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/db/jest.config.js",
+            "tsConfig": "apps/db/tsconfig.spec.json"
+          }
+        }
+      }
     }
   },
   "cli": {

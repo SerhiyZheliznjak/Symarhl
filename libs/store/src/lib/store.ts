@@ -1,4 +1,4 @@
-import {Room} from '@monorepo/core';
+import {RoomTemp, TempLocation} from '@monorepo/core';
 import {HomeState, NO_READINGS, PowerValue} from '@monorepo/core';
 
 const homeState: HomeState = {
@@ -8,6 +8,7 @@ const homeState: HomeState = {
     bedroom: NO_READINGS,
     kidsroom: NO_READINGS,
     outdoor: NO_READINGS,
+    water: NO_READINGS,
   },
   variables: {
     studio: NO_READINGS,
@@ -45,11 +46,11 @@ export function setVariable(
   homeState.variables[variable] = val;
 }
 
-export function setPower(power: keyof HomeState['power'], state: PowerValue) {
+export function logPower(power: keyof HomeState['power'], state: PowerValue) {
   homeState.power[power] = state;
 }
 
-export function setTemp(room: Room, temp: number) {
+export function logTemp(room: TempLocation, temp: number) {
   homeState.temp[room] = temp;
 }
 
@@ -57,15 +58,15 @@ export function getState() {
   return homeState;
 }
 
-export function setDayNightSchedule(morning = 7, evening = 21) {
+export function logDayNightSchedule(morning = 7, evening = 21) {
   homeState.nightShift = {...homeState.nightShift, morning, evening};
 }
 
-export function setNightTemp(room: Room, nightTemp: number) {
+export function logNightTemp(room: RoomTemp, nightTemp: number) {
   homeState.nightShift.at.set(room, nightTemp);
 }
 
-export function delNightTemp(room: Room): number {
+export function delNightTemp(room: RoomTemp): number {
   const {nightShift} = homeState;
   nightShift.at.delete(room);
   return nightShift.at.size;

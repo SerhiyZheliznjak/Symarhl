@@ -3,13 +3,13 @@ import {Container, Grid} from '@material-ui/core';
 import Room from './components/room';
 import {connect} from 'react-redux';
 import {StoreType} from '../../../store/reducers';
-import {RoomTemp, Variables, Power, PowerValue} from '@monorepo/core';
+import {TempReadings, Variables, Power, PowerValue} from '@monorepo/core';
 import {getHomeState} from '../../../store/actions/common';
 import Header from './components/header';
 
 interface Props {
   isLandscape: boolean;
-  temperature: RoomTemp;
+  temperature: TempReadings;
   power: Power;
   variables: Variables;
   fetchHomeState: () => void;
@@ -46,7 +46,7 @@ class MainScreen extends React.PureComponent<Props> {
     const rooms: ARoom[] = Array.from(Object.entries(temperature))
       .filter(([name]) => name !== 'outdoor')
       .map(
-        ([name, temp]: [keyof RoomTemp, number]) =>
+        ([name, temp]: [keyof TempReadings, number]) =>
           new ARoom(name, temp, variables[name], power[name]),
       );
     return (

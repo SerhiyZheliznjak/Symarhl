@@ -22,7 +22,7 @@ const corsOptions: cors.CorsOptions = {
       callback(null, true);
     } else {
       debug(`unknown origin ${origin}`);
-      callback(new Error('CORS IS NOT ALLOWED'));
+      callback(new Error(`CORS IS NOT ALLOWED for ${origin}`));
     }
   },
 };
