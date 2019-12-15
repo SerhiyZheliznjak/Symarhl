@@ -14,10 +14,7 @@ class MqttService {
     this.client.on('message', (topic: Topic, bytes: unknown) => {
       const payload = String(bytes);
       if (topic === RequestSetTopic.confirmed) {
-        const [key, val] = payload.split('/')[1].split('=') as [
-          keyof Variables,
-          string,
-        ];
+        const [key, val] = payload.split('=') as [keyof Variables, string];
         this.confirmations.set(key, parseFloat(val));
       }
       messageHandler(topic, payload);

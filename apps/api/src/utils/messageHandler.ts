@@ -47,19 +47,19 @@ export const handleMessage = (topic: Topic, payload: string) => {
       break;
     case ReadTopic.variables:
       parsePayload(payload).forEach(
-        ([topic, value]: [RequestSetTopic, string]) =>
-          setVariable(stripSet(topic), parseFloat(value)),
+        ([topic, value]: [keyof Variables, string]) =>
+          setVariable(topic, parseFloat(value)),
       );
       break;
     case RequestSetTopic.confirmed:
-      const [key, val] = stripSet(payload).split('=') as [
+      const [key, val] = payload.split('=') as [
         keyof HomeState['variables'],
         string,
       ];
       setVariable(key, parseFloat(val));
       break;
     case ReadTopic.started:
-      // setAllVariables();
+      setAllVariables();
       setCurrentShift();
       break;
   }
