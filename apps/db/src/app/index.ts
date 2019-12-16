@@ -1,9 +1,16 @@
 import * as express from 'express';
+import {querryVariables} from '../influx';
 
 const app = express();
 
-app.get('/api', (_req, res) => {
-  res.send({message: 'Welcome to db!'});
+app.get('/', function(req, res) {
+  querryVariables()
+    .then(result => {
+      res.json(result);
+    })
+    .catch(err => {
+      res.status(500).send(err.stack);
+    });
 });
 
 export default app;

@@ -55,7 +55,7 @@ export function logTemp(room: TempLocation, temp: number) {
 }
 
 export function getState() {
-  return homeState;
+  return {...homeState};
 }
 
 export function logDayNightSchedule(morning = 7, evening = 21) {
