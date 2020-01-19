@@ -14,8 +14,12 @@ export type Variables = {
   [K in VariablesKeys]: number;
 };
 
-type PowerKeys = 'pump' | 'wall' | RoomNames;
+export interface Schedule {
+  temp: number;
+  frame: [number, number];
+}
 
+type PowerKeys = 'pump' | 'wall' | RoomNames;
 export type Power = {
   [K in PowerKeys]: PowerValue;
 };
@@ -29,6 +33,7 @@ export interface HomeState {
     morning: number;
     evening: number;
   };
+  schedule: {[key in RoomNames]?: Schedule[]};
 }
 
 export const NO_READINGS = -127;

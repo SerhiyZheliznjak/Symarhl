@@ -31,6 +31,7 @@ const homeState: HomeState = {
     morning: 7,
     evening: 21,
   },
+  schedule: {},
 };
 
 const validateVariableName = (variableName: string) => {
