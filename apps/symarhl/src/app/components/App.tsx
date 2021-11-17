@@ -29,7 +29,6 @@ class App extends React.PureComponent<Props> {
 
   render() {
     return (
-      <React.Fragment>
         <Router history={history}>
           <div>
             <Switch>
@@ -39,7 +38,6 @@ class App extends React.PureComponent<Props> {
             </Switch>
           </div>
         </Router>
-      </React.Fragment>
     );
   }
 }

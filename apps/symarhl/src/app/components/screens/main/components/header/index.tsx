@@ -6,7 +6,6 @@ import {isOn} from 'apps/symarhl/src/app/utility/power';
 import styles from '../../../../common/icons/styles';
 import Temperature from '../../../../common/temperature';
 import SunThermometer from '../../../../common/icons/SunThermometer';
-import { SvgIconProps } from '@material-ui/core/SvgIcon';
 
 interface Props {
   pumpPower: PowerValue;
@@ -19,9 +18,9 @@ class Header extends React.PureComponent<Props> {
   //   return outdoorTemp > 16 ? Error : outdoorTemp > 2 ? Error : Error;
   // }
 
-  getWeaterIconColor(): SvgIconProps["color"] {
+  getWeaterIconColor(): string {
     const {outdoorTemp} = this.props;
-    return outdoorTemp < 2 ? 'primary' : outdoorTemp < 16 ? 'action' : undefined ;
+    return outdoorTemp < 2 ? '#0098FF' : outdoorTemp < 16 ? '#CCC' : "#cc7722" ;
   }
 
   render() {
@@ -29,9 +28,9 @@ class Header extends React.PureComponent<Props> {
     // const WeaterIcon = this.getWeaterIcon();
     return (
       <AppBar position="static" color="default" style={{marginBottom: '20px'}}>
-        <Toolbar style={{display: 'flex', justifyContent: 'space-between'}}>
-          <div>
-            <SunThermometer color={this.getWeaterIconColor()} htmlColor="#cc7722" style={{alignSelf: 'right'}}/>
+        <Toolbar style={{display: 'flex', justifyContent: 'space-between', backgroundColor: '#2C2C32'}}>
+          <div style={{display: 'flex', alignItems: 'center'}}>
+            <SunThermometer htmlColor={this.getWeaterIconColor()} style={{marginLeft: '16px', marginRight: '16px'}}/>
             <Temperature val={outdoorTemp} />
           </div>
           <PumpIcon

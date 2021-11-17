@@ -21,7 +21,7 @@ class Room extends React.PureComponent<Props> {
     const {name, isLandscape, temp, minTemp, power} = this.props;
     return (
       <Grid item xs={isLandscape ? 4 : 6} style={{height: '200px'}}>
-        <Paper style={{height: '100%'}}>
+        <Paper style={{height: '100%', backgroundColor: '#2C2C32', color: '#CCC'}}>
           <Grid
             container
             direction="row"
