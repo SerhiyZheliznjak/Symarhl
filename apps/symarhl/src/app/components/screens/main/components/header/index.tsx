@@ -5,7 +5,8 @@ import PumpIcon from '../../../../common/icons/PumpIcon';
 import {isOn} from 'apps/symarhl/src/app/utility/power';
 import styles from '../../../../common/icons/styles';
 import Temperature from '../../../../common/temperature';
-import Error from '../../../../common/icons/Error';
+import SunThermometer from '../../../../common/icons/SunThermometer';
+import { SvgIconProps } from '@material-ui/core/SvgIcon';
 
 interface Props {
   pumpPower: PowerValue;
@@ -13,23 +14,30 @@ interface Props {
 }
 
 class Header extends React.PureComponent<Props> {
-  getWeaterIcon() {
+  // getWeaterIcon() {
+  //   const {outdoorTemp} = this.props;
+  //   return outdoorTemp > 16 ? Error : outdoorTemp > 2 ? Error : Error;
+  // }
+
+  getWeaterIconColor(): SvgIconProps["color"] {
     const {outdoorTemp} = this.props;
-    return outdoorTemp > 16 ? Error : outdoorTemp > 2 ? Error : Error;
+    return outdoorTemp < 2 ? 'primary' : outdoorTemp < 16 ? 'action' : undefined ;
   }
 
   render() {
     const {pumpPower, outdoorTemp} = this.props;
-    const WeaterIcon = this.getWeaterIcon();
+    // const WeaterIcon = this.getWeaterIcon();
     return (
       <AppBar position="static" color="default" style={{marginBottom: '20px'}}>
-        <Toolbar>
+        <Toolbar style={{display: 'flex', justifyContent: 'space-between'}}>
+          <div>
+            <SunThermometer color={this.getWeaterIconColor()} htmlColor="#cc7722" style={{alignSelf: 'right'}}/>
+            <Temperature val={outdoorTemp} />
+          </div>
           <PumpIcon
             fontSize="small"
             style={isOn(pumpPower) ? styles.enabled : styles.disabled}
           />
-          <WeaterIcon />
-          <Temperature val={outdoorTemp} />
           {/* <NightsStayIcon
               style={
                 variables.nightShift > 0 ? styles.enabled : styles.disabled

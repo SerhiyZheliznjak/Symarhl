@@ -2,8 +2,6 @@ import React from 'react';
 import {SvgIcon} from '@material-ui/core';
 import {SvgIconProps} from '@material-ui/core/SvgIcon';
 
-// class PumpIcon extends React.PureComponent<SvgIconProps> {
-//   render() {
 export default (props: SvgIconProps) => {
   return (
     <SvgIcon {...props}>
@@ -11,6 +9,4 @@ export default (props: SvgIconProps) => {
     </SvgIcon>
   );
 };
-// }
 
-// export default PumpIcon;

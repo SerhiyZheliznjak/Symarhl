@@ -4,7 +4,8 @@ import {connect} from 'react-redux';
 import debounce from 'lodash/debounce';
 import {setMinTemp} from '../../../store/actions/common';
 import {NO_READINGS} from '@monorepo/core';
-import Error from '../icons/Error';
+import Plus from '../icons/Plus';
+import Minus from '../icons/Minus';
 
 interface Props {
   room: string;
@@ -49,8 +50,8 @@ class Ticker extends React.PureComponent<Props> {
         alignItems="center"
       >
         <Grid item>
-          <Button onClick={this.onTempUp} color="secondary">
-            <Error />
+          <Button onClick={this.onTempUp} color="secondary" variant="outlined">
+            <Plus />
           </Button>
         </Grid>
         <Grid item>
@@ -59,8 +60,8 @@ class Ticker extends React.PureComponent<Props> {
           </Typography>
         </Grid>
         <Grid item>
-          <Button onClick={this.onTempDown} color="primary">
-            <Error />
+          <Button onClick={this.onTempDown} color="primary"  variant="outlined">
+            <Minus />
           </Button>
         </Grid>
       </Grid>
