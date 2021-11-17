@@ -1,4 +1,4 @@
 export default {
   disabled: { color: "gray" },
-  enabled: { color: "green" }
+  enabled: { color: "#32CD32" }
 };
