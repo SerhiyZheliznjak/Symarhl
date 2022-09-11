@@ -14,8 +14,8 @@ export const initialState: HomeState = {
     bathroom: NO_READINGS,
     kidsroom: NO_READINGS,
     bedroom: NO_READINGS,
-    interval: NO_READINGS,
-    hysteresis: NO_READINGS,
+    interval: 20000,
+    hysteresis: 0.3,
   },
   power: {
     pump: '-1',

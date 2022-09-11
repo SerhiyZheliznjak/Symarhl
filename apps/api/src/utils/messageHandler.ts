@@ -9,7 +9,7 @@ import {
   NO_READINGS,
   UtilityTemp,
 } from '@monorepo/core';
-import {logTemp, logPower, setVariable, getState, readVariablesFromFile} from '@monorepo/store';
+import {logTemp, logPower, getState, setVariable} from '@monorepo/store';
 import {mqttService, parsePayload} from '@monorepo/mqtt';
 // import {setCurrentShift} from './nightShift';
 
@@ -60,12 +60,13 @@ export const handleMessage = (topic: Topic, payload: string) => {
 };
 
 async function setAllVariables() {
-  const {variables, away} = await readVariablesFromFile();
-  
+  const {variables, away} = getState();
+
   const values = away ? away.restoreTo : variables;
-  
-  Object.keys(variables).forEach((variable: keyof Variables, i: number) => {
-    const value = variables[variable];
+
+  Object.keys(values).forEach((variable: keyof Variables, i: number) => {
+    const value = values[variable];
+    setVariable(variable, value);
     if (value !== NO_READINGS)
       setTimeout(
         () =>

@@ -23,8 +23,8 @@ import Header from './components/header';
 import {TextFieldProps} from '@material-ui/core/TextField';
 import dayjs from 'dayjs';
 import heatingService from '../../../api/heatingService';
-import { StoreType } from 'apps/symarhl/src/main';
-import { fetchHomeState } from '../../../store';
+import {StoreType} from 'apps/symarhl/src/main';
+import {fetchHomeState} from '../../../store';
 
 interface Props {
   temp: TempReadings;
@@ -82,8 +82,7 @@ class MainScreen extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { temp, power, variables} = this.props;
-    console.log(this.props)
+    const {temp, power, variables} = this.props;
     const rooms: ARoom[] = Array.from(Object.entries(temp))
       .filter(([name]) => name in RoomTemp)
       .map(
@@ -143,7 +142,7 @@ class MainScreen extends React.PureComponent<Props, State> {
 
 export default connect(
   ({home}: StoreType) => ({
-    ...home
+    ...home,
   }),
   (dispatch: Dispatch<any>) => ({
     fetchHomeState: () => dispatch(fetchHomeState()),

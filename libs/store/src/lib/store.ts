@@ -1,6 +1,6 @@
 import {RoomTemp, StoredHomeState, TempLocation} from '@monorepo/core';
 import {HomeState, NO_READINGS, PowerValue} from '@monorepo/core';
-const {writeFile, readFile} = require('fs/promises');
+const {writeFile, readFile} = require('fs').promises;
 
 const variablesFilePath = '/media/variables.json';
 const AWAY_TEMP = 17;
@@ -15,12 +15,12 @@ export const initialHomeState: HomeState = {
     water: NO_READINGS,
   },
   variables: {
-    studio: NO_READINGS,
-    bathroom: NO_READINGS,
-    kidsroom: NO_READINGS,
-    bedroom: NO_READINGS,
-    interval: NO_READINGS,
-    hysteresis: NO_READINGS,
+    studio: AWAY_TEMP,
+    bathroom: AWAY_TEMP,
+    kidsroom: AWAY_TEMP,
+    bedroom: AWAY_TEMP,
+    interval: 20000,
+    hysteresis: 0.3,
   },
   power: {
     pump: '-1',
@@ -31,7 +31,7 @@ export const initialHomeState: HomeState = {
     bedroom: '-1',
   },
   nightShift: {
-    at: new Map(),
+    at: null,
     morning: 7,
     evening: 21,
   },
@@ -53,6 +53,11 @@ export const readVariablesFromFile = async () => {
   }
   return homeState;
 };
+
+readVariablesFromFile().then(({variables, away}) => {
+  homeState.variables = variables;
+  homeState.away = away;
+});
 
 const saveVariables = () => {
   const {variables, away} = homeState;
@@ -91,7 +96,7 @@ export function setAwayUntil(awayUntil: string) {
 export const removeAwayUntil = () => {
   if (homeState.away) {
     homeState.variables = {
-      ...(homeState.away.restoreTo || initialHomeState.variables),
+      ...homeState.away.restoreTo,
     };
   }
   homeState.away = null;

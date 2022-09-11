@@ -36,23 +36,31 @@ export const homeSlice = createSlice({
   },
 
   extraReducers: builder => {
-    builder.addCase(fetchHomeState.fulfilled, (_: HomeState, {payload}: PayloadAction<HomeState>) => payload);
+    builder.addCase(
+      fetchHomeState.fulfilled,
+      (_: HomeState, {payload}: PayloadAction<HomeState>) => payload,
+    );
 
-    builder.addCase(putMinTemp.fulfilled, (state: HomeState, {payload: {room, temp}}: PayloadAction<{room: RoomNames; temp: number}>) => {
-      const newState: HomeState = {
-        ...state,
-        variables: {
-          ...state.variables,
-          [room]: temp,
-        },
-      };
-      return newState;
-    });
+    builder.addCase(
+      putMinTemp.fulfilled,
+      (
+        state: HomeState,
+        {payload: {room, temp}}: PayloadAction<{room: RoomNames; temp: number}>,
+      ) => {
+        const newState: HomeState = {
+          ...state,
+          variables: {
+            ...state.variables,
+            [room]: temp,
+          },
+        };
+        return newState;
+      },
+    );
   },
 });
 
 export const {
   actions: {setHomeState},
-  reducer: home
+  reducer: home,
 } = homeSlice;
-
