@@ -1,7 +1,7 @@
 import {Router, Request, Response} from 'express';
 import {OK} from 'http-status-codes';
 
-import {setAwayMode} from '../../utils/scheduleService';
+import {restoreVars, setAwayMode} from '../../utils/scheduleService';
 
 const scheduleRouter = Router();
 
@@ -12,8 +12,9 @@ scheduleRouter.put('/away', (req: Request, res: Response) => {
 });
 
 scheduleRouter.delete('/away', (_: Request, res: Response) => {
-  setAwayMode(null);
-  res.send(OK);
+  restoreVars().then(() => {
+    res.send(OK);
+  });
 });
 
 export {scheduleRouter};

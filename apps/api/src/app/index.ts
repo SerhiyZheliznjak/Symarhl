@@ -9,6 +9,8 @@ import {
   variablesRouter,
   scheduleRouter,
 } from './routes';
+import {readVariablesFromFile} from '@monorepo/store';
+import {setAwayMode} from '../utils/scheduleService';
 
 // import {corsMiddleware} from './cors';
 
@@ -25,5 +27,11 @@ app.use('/temp', temperatureRouter);
 app.use('/system', systemRouter);
 app.use('/variables', variablesRouter);
 app.use('/schedule', scheduleRouter);
+
+readVariablesFromFile().then(({away}) => {
+  if (away) {
+    setAwayMode(away.until, true);
+  }
+});
 
 export {app};

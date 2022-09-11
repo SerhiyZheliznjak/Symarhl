@@ -17,6 +17,7 @@ import {
   Power,
   PowerValue,
   RoomTemp,
+  HomeState,
 } from '@monorepo/core';
 
 import Header from './components/header';
@@ -30,6 +31,7 @@ interface Props {
   temp: TempReadings;
   power: Power;
   variables: Variables;
+  away: HomeState['away'];
   fetchHomeState: () => void;
 }
 
@@ -66,6 +68,15 @@ class MainScreen extends React.PureComponent<Props, State> {
       heatingService.put('/schedule/away', {until: awayUntil.toISOString()});
     }
   };
+
+  componentWillUpdate(nextProps: Props) {
+    if (this.props.away !== nextProps.away)
+      this.setState({
+        arrivalDate: nextProps.away
+          ? dayjs(nextProps.away.until).format('DD MM YY')
+          : null,
+      });
+  }
 
   fetchData = () => {
     const {fetchHomeState} = this.props;

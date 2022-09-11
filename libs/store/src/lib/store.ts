@@ -3,7 +3,7 @@ import {HomeState, NO_READINGS, PowerValue} from '@monorepo/core';
 const {writeFile, readFile} = require('fs').promises;
 
 const variablesFilePath = '/media/variables.json';
-const AWAY_TEMP = 17;
+export const AWAY_TEMP = 17;
 
 export const initialHomeState: HomeState = {
   temp: {
@@ -54,11 +54,6 @@ export const readVariablesFromFile = async () => {
   return homeState;
 };
 
-readVariablesFromFile().then(({variables, away}) => {
-  homeState.variables = variables;
-  homeState.away = away;
-});
-
 const saveVariables = () => {
   const {variables, away} = homeState;
   writeFile(variablesFilePath, JSON.stringify({variables, away}));
@@ -89,7 +84,6 @@ export function setAwayUntil(awayUntil: string) {
       studio: AWAY_TEMP,
     };
     saveVariables();
-    return AWAY_TEMP;
   }
 }
 
@@ -100,6 +94,8 @@ export const removeAwayUntil = () => {
     };
   }
   homeState.away = null;
+
+  saveVariables();
 };
 
 export function logPower(power: keyof HomeState['power'], state: PowerValue) {

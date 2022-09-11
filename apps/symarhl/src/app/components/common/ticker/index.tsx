@@ -2,11 +2,11 @@ import React, {Dispatch} from 'react';
 import {Grid, Button, Typography} from '@material-ui/core';
 import {connect} from 'react-redux';
 import debounce from 'lodash/debounce';
-import {NO_READINGS, RoomNames} from '@monorepo/core';
+import {RoomNames} from '@monorepo/core';
 import Plus from '../icons/Plus';
 import Minus from '../icons/Minus';
-import { putMinTemp } from '../../../store';
-import { StoreType } from 'apps/symarhl/src/main';
+import {putMinTemp} from '../../../store';
+import {StoreType} from 'apps/symarhl/src/main';
 
 interface Props {
   room: string;
@@ -21,7 +21,7 @@ class Ticker extends React.PureComponent<Props> {
   };
 
   componentWillUpdate(nextProps: Props) {
-    if (this.props.minTemp === NO_READINGS && nextProps.minTemp !== NO_READINGS)
+    if (this.props.minTemp !== nextProps.minTemp)
       this.setState({temp: nextProps.minTemp});
   }
 
@@ -53,7 +53,12 @@ class Ticker extends React.PureComponent<Props> {
         alignItems="center"
       >
         <Grid item>
-          <Button onClick={this.onTempUp} color="secondary" variant="outlined" disabled={isAway}>
+          <Button
+            onClick={this.onTempUp}
+            color="secondary"
+            variant="outlined"
+            disabled={isAway}
+          >
             <Plus />
           </Button>
         </Grid>
@@ -63,7 +68,12 @@ class Ticker extends React.PureComponent<Props> {
           </Typography>
         </Grid>
         <Grid item>
-          <Button onClick={this.onTempDown} color="primary"  variant="outlined" disabled={isAway}>
+          <Button
+            onClick={this.onTempDown}
+            color="primary"
+            variant="outlined"
+            disabled={isAway}
+          >
             <Minus />
           </Button>
         </Grid>

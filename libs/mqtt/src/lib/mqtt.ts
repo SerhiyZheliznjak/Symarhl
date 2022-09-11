@@ -31,17 +31,20 @@ class MqttService {
     payload: string,
     attempts = 5,
   ) {
-    const varName = topic.split('/')[1] as keyof Variables;
-    const verifyConfirmation = () => {
-      if (
-        this.confirmations.get(varName) !== parseFloat(payload) &&
-        attempts > 0
-      )
-        this.setVariableValue(topic, payload, --attempts);
-    };
+    return new Promise<void>(async resolve => {
+      const varName = topic.split('/')[1] as keyof Variables;
+      const verifyConfirmation = () => {
+        if (
+          this.confirmations.get(varName) !== parseFloat(payload) &&
+          attempts > 0
+        )
+          this.setVariableValue(topic, payload, --attempts);
+        else resolve();
+      };
 
-    await this.sendMessage(topic, payload);
-    setTimeout(verifyConfirmation, 1000);
+      await this.sendMessage(topic, payload);
+      setTimeout(verifyConfirmation, 1000);
+    });
   }
 }
 
