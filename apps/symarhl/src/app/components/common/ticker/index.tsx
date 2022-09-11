@@ -2,14 +2,16 @@ import React, {Dispatch} from 'react';
 import {Grid, Button, Typography} from '@material-ui/core';
 import {connect} from 'react-redux';
 import debounce from 'lodash/debounce';
-import {setMinTemp} from '../../../store/actions/common';
-import {NO_READINGS} from '@monorepo/core';
+import {NO_READINGS, RoomNames} from '@monorepo/core';
 import Plus from '../icons/Plus';
 import Minus from '../icons/Minus';
+import { putMinTemp } from '../../../store';
+import { StoreType } from 'apps/symarhl/src/main';
 
 interface Props {
   room: string;
   minTemp: number;
+  isAway: boolean;
   doSetMinTemp: (room: string, temp: number) => void;
 }
 
@@ -41,6 +43,7 @@ class Ticker extends React.PureComponent<Props> {
 
   render() {
     const {temp} = this.state;
+    const {isAway} = this.props;
     return (
       <Grid
         direction="column"
@@ -50,7 +53,7 @@ class Ticker extends React.PureComponent<Props> {
         alignItems="center"
       >
         <Grid item>
-          <Button onClick={this.onTempUp} color="secondary" variant="outlined">
+          <Button onClick={this.onTempUp} color="secondary" variant="outlined" disabled={isAway}>
             <Plus />
           </Button>
         </Grid>
@@ -60,7 +63,7 @@ class Ticker extends React.PureComponent<Props> {
           </Typography>
         </Grid>
         <Grid item>
-          <Button onClick={this.onTempDown} color="primary"  variant="outlined">
+          <Button onClick={this.onTempDown} color="primary"  variant="outlined" disabled={isAway}>
             <Minus />
           </Button>
         </Grid>
@@ -70,10 +73,12 @@ class Ticker extends React.PureComponent<Props> {
 }
 
 export default connect(
-  null,
+  ({home}: StoreType) => ({
+    isAway: !!home.away,
+  }),
   (dispatch: Dispatch<any>) => ({
-    doSetMinTemp: debounce((room: string, temp: number) => {
-      dispatch(setMinTemp(room, temp));
+    doSetMinTemp: debounce((room: RoomNames, temp: number) => {
+      dispatch(putMinTemp({room, temp}));
     }, 500),
   }),
 )(Ticker);

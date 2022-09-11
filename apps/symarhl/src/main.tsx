@@ -1,15 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
-import {applyMiddleware, createStore} from 'redux';
-import thunk from 'redux-thunk';
 
 import './main.css';
 import App from './app/components/App';
 import * as serviceWorker from './app/serviceWorker';
-import reducers from './app/store/reducers';
 
-const store = createStore(reducers, applyMiddleware(thunk));
+import {combineReducers, configureStore} from '@reduxjs/toolkit';
+import {home} from './app/store';
+
+const reducer = combineReducers({
+  home: home,
+});
+
+export type StoreType = ReturnType<typeof reducer>;
+
+export const store = configureStore({
+  reducer,
+});
 
 ReactDOM.render(
   <Provider store={store}>

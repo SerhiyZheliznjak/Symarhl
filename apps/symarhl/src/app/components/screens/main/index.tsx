@@ -1,8 +1,16 @@
 import React, {Dispatch} from 'react';
-import {Container, Grid} from '@material-ui/core';
+
+import {
+  Container,
+  Grid,
+  TextField,
+  Button,
+  Typography,
+} from '@material-ui/core';
+
 import Room from './components/room';
 import {connect} from 'react-redux';
-import {StoreType} from '../../../store/reducers';
+
 import {
   TempReadings,
   Variables,
@@ -10,12 +18,16 @@ import {
   PowerValue,
   RoomTemp,
 } from '@monorepo/core';
-import {getHomeState} from '../../../store/actions/common';
+
 import Header from './components/header';
+import {TextFieldProps} from '@material-ui/core/TextField';
+import dayjs from 'dayjs';
+import heatingService from '../../../api/heatingService';
+import { StoreType } from 'apps/symarhl/src/main';
+import { fetchHomeState } from '../../../store';
 
 interface Props {
-  isLandscape: boolean;
-  temperature: TempReadings;
+  temp: TempReadings;
   power: Power;
   variables: Variables;
   fetchHomeState: () => void;
@@ -30,8 +42,30 @@ class ARoom {
   ) {}
 }
 
-class MainScreen extends React.PureComponent<Props> {
+type State = {awayFor: number; arrivalDate: null | string};
+
+class MainScreen extends React.PureComponent<Props, State> {
   private interval: NodeJS.Timeout;
+
+  state: State = {
+    awayFor: 3,
+    arrivalDate: null,
+  };
+
+  onChangeAwayFor: TextFieldProps['onChange'] = ({target}) => {
+    this.setState({awayFor: +target.value});
+  };
+
+  onSubmitAway = () => {
+    if (this.state.arrivalDate) {
+      this.setState({arrivalDate: null});
+      heatingService.delete('/schedule/away');
+    } else {
+      const awayUntil = dayjs().add(this.state.awayFor, 'days');
+      this.setState({arrivalDate: awayUntil.format('DD MM YY')});
+      heatingService.put('/schedule/away', {until: awayUntil.toISOString()});
+    }
+  };
 
   fetchData = () => {
     const {fetchHomeState} = this.props;
@@ -48,8 +82,9 @@ class MainScreen extends React.PureComponent<Props> {
   }
 
   render() {
-    const {isLandscape, temperature, power, variables} = this.props;
-    const rooms: ARoom[] = Array.from(Object.entries(temperature))
+    const { temp, power, variables} = this.props;
+    console.log(this.props)
+    const rooms: ARoom[] = Array.from(Object.entries(temp))
       .filter(([name]) => name in RoomTemp)
       .map(
         ([name, temp]: [RoomTemp, number]) =>
@@ -57,20 +92,49 @@ class MainScreen extends React.PureComponent<Props> {
       );
     return (
       <React.Fragment>
-        <Header pumpPower={power.pump} outdoorTemp={temperature.outdoor} />
+        <Header pumpPower={power.pump} outdoorTemp={temp.outdoor} />
         <Container maxWidth="lg">
           <Grid container justify="flex-start" spacing={2}>
             {rooms.map(({name, temp, minTemp, power}) => (
               <Room
                 key={name}
                 name={name}
-                isLandscape={isLandscape}
+                isLandscape={false}
                 temp={temp}
                 power={power}
                 minTemp={minTemp}
               />
             ))}
           </Grid>
+          <div
+            style={{display: 'flex', padding: '20px', justifyContent: 'center'}}
+          >
+            {!!this.state.arrivalDate ? (
+              <Typography
+                variant="h5"
+                component="h3"
+                align="center"
+                style={{color: '#CCC'}}
+              >
+                Тепло буде з {this.state.arrivalDate}
+              </Typography>
+            ) : (
+              <TextField
+                label="Днів не гріти:"
+                type="number"
+                value={this.state.awayFor}
+                onChange={this.onChangeAwayFor}
+              />
+            )}
+
+            <Button
+              variant="contained"
+              onClick={this.onSubmitAway}
+              style={{margin: '0px 20px'}}
+            >
+              {!!this.state.arrivalDate ? 'Гріти ВЖЕ!' : 'Ok'}
+            </Button>
+          </div>
         </Container>
       </React.Fragment>
     );
@@ -78,13 +142,10 @@ class MainScreen extends React.PureComponent<Props> {
 }
 
 export default connect(
-  ({screen, temperature, power, variables}: StoreType) => ({
-    isLandscape: screen.isLandscape,
-    temperature,
-    power,
-    variables,
+  ({home}: StoreType) => ({
+    ...home
   }),
   (dispatch: Dispatch<any>) => ({
-    fetchHomeState: () => dispatch(getHomeState()),
+    fetchHomeState: () => dispatch(fetchHomeState()),
   }),
 )(MainScreen);

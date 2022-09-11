@@ -11,3 +11,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.MuiTypography-body1,
+.MuiInputBase-input,
+.MuiFormLabel-root {
+  color: #CCC !important;
+}
+
+.MuiInput-underline:before {
+  border-bottom-color: #CCC !important;
+}
