@@ -9,9 +9,9 @@ import {
   NO_READINGS,
   UtilityTemp,
 } from '@monorepo/core';
-import {logTemp, logPower, setVariable, getState} from '@monorepo/store';
+import {logTemp, logPower, setVariable, getState, readVariablesFromFile} from '@monorepo/store';
 import {mqttService, parsePayload} from '@monorepo/mqtt';
-import {setCurrentShift} from './nightShift';
+// import {setCurrentShift} from './nightShift';
 
 export const handleMessage = (topic: Topic, payload: string) => {
   switch (topic) {
@@ -39,12 +39,12 @@ export const handleMessage = (topic: Topic, payload: string) => {
           logPower(topic, value),
       );
       break;
-    case ReadTopic.variables:
-      parsePayload(payload).forEach(
-        ([topic, value]: [keyof Variables, string]) =>
-          setVariable(topic, parseFloat(value)),
-      );
-      break;
+    // case ReadTopic.variables:
+    //   parsePayload(payload).forEach(
+    //     ([topic, value]: [keyof Variables, string]) =>
+    //       setVariable(topic, parseFloat(value)),
+    //   );
+    //   break;
     case RequestSetTopic.confirmed:
       const [key, val] = payload.split('=') as [
         keyof HomeState['variables'],
@@ -53,14 +53,17 @@ export const handleMessage = (topic: Topic, payload: string) => {
       setVariable(key, parseFloat(val));
       break;
     case ReadTopic.started:
-      setAllVariables();
-      setCurrentShift();
+      void setAllVariables();
+      // setCurrentShift();
       break;
   }
 };
 
-function setAllVariables() {
-  const {variables} = getState();
+async function setAllVariables() {
+  const {variables, away} = await readVariablesFromFile();
+  
+  const values = away ? away.restoreTo : variables;
+  
   Object.keys(variables).forEach((variable: keyof Variables, i: number) => {
     const value = variables[variable];
     if (value !== NO_READINGS)

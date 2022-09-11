@@ -14,17 +14,12 @@ export type Variables = {
   [K in VariablesKeys]: number;
 };
 
-export interface Schedule {
-  temp: number;
-  frame: [number, number];
-}
-
 type PowerKeys = 'pump' | 'wall' | RoomNames;
 export type Power = {
   [K in PowerKeys]: PowerValue;
 };
 
-export interface HomeState {
+export type HomeState = {
   temp: TempReadings;
   variables: Variables;
   power: Power;
@@ -33,7 +28,12 @@ export interface HomeState {
     morning: number;
     evening: number;
   };
-  schedule: {[key in RoomNames]?: Schedule[]};
-}
+  away: {
+    until: string;
+    restoreTo: Variables;
+  } | null;
+};
+
+export type StoredHomeState = Pick<HomeState, 'variables' | 'away'>;
 
 export const NO_READINGS = -127;

@@ -1,7 +1,11 @@
-import {RoomTemp, TempLocation} from '@monorepo/core';
+import {RoomTemp, StoredHomeState, TempLocation} from '@monorepo/core';
 import {HomeState, NO_READINGS, PowerValue} from '@monorepo/core';
+const {writeFile, readFile} = require('fs/promises');
 
-const homeState: HomeState = {
+const variablesFilePath = '/media/variables.json';
+const AWAY_TEMP = 17;
+
+export const initialHomeState: HomeState = {
   temp: {
     studio: NO_READINGS,
     bathroom: NO_READINGS,
@@ -31,7 +35,28 @@ const homeState: HomeState = {
     morning: 7,
     evening: 21,
   },
-  schedule: {},
+  away: null,
+};
+
+let homeState = initialHomeState;
+
+export const readVariablesFromFile = async () => {
+  try {
+    const res = await readFile(variablesFilePath);
+    if (res) {
+      const {variables, away} = JSON.parse(res) as StoredHomeState;
+      homeState.variables = variables;
+      homeState.away = away;
+    }
+  } catch (err) {
+    console.error(`Could not read from ${variablesFilePath}`);
+  }
+  return homeState;
+};
+
+const saveVariables = () => {
+  const {variables, away} = homeState;
+  writeFile(variablesFilePath, JSON.stringify({variables, away}));
 };
 
 const validateVariableName = (variableName: string) => {
@@ -45,7 +70,32 @@ export function setVariable(
 ) {
   validateVariableName(variable);
   homeState.variables[variable] = val;
+  saveVariables();
 }
+
+export function setAwayUntil(awayUntil: string) {
+  if (awayUntil) {
+    homeState.away = {until: awayUntil, restoreTo: {...homeState.variables}};
+    homeState.variables = {
+      ...homeState.variables,
+      bathroom: AWAY_TEMP,
+      bedroom: AWAY_TEMP,
+      kidsroom: AWAY_TEMP,
+      studio: AWAY_TEMP,
+    };
+    saveVariables();
+    return AWAY_TEMP;
+  }
+}
+
+export const removeAwayUntil = () => {
+  if (homeState.away) {
+    homeState.variables = {
+      ...(homeState.away.restoreTo || initialHomeState.variables),
+    };
+  }
+  homeState.away = null;
+};
 
 export function logPower(power: keyof HomeState['power'], state: PowerValue) {
   homeState.power[power] = state;

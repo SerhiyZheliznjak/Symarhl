@@ -7,7 +7,7 @@ import {
   systemRouter,
   temperatureRouter,
   variablesRouter,
-  nigthShiftRouter,
+  scheduleRouter,
 } from './routes';
 
 // import {corsMiddleware} from './cors';
@@ -24,6 +24,6 @@ app.use(express.static(join(__dirname, 'public')));
 app.use('/temp', temperatureRouter);
 app.use('/system', systemRouter);
 app.use('/variables', variablesRouter);
-app.use('/nightshift', nigthShiftRouter);
+app.use('/schedule', scheduleRouter);
 
 export {app};

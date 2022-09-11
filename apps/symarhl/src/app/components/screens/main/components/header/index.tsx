@@ -13,12 +13,7 @@ interface Props {
 }
 
 class Header extends React.PureComponent<Props> {
-  // getWeaterIcon() {
-  //   const {outdoorTemp} = this.props;
-  //   return outdoorTemp > 16 ? Error : outdoorTemp > 2 ? Error : Error;
-  // }
-
-  getWeaterIconColor(): string {
+  getWeatherIconColor(): string {
     const {outdoorTemp} = this.props;
     return outdoorTemp < 2 ? '#0098FF' : outdoorTemp < 16 ? '#CCC' : "#cc7722" ;
   }
@@ -30,18 +25,13 @@ class Header extends React.PureComponent<Props> {
       <AppBar position="static" color="default" style={{marginBottom: '20px'}}>
         <Toolbar style={{display: 'flex', justifyContent: 'space-between', backgroundColor: '#2C2C32'}}>
           <div style={{display: 'flex', alignItems: 'center'}}>
-            <SunThermometer htmlColor={this.getWeaterIconColor()} style={{marginLeft: '16px', marginRight: '16px'}}/>
+            <SunThermometer htmlColor={this.getWeatherIconColor()} style={{marginLeft: '16px', marginRight: '16px'}}/>
             <Temperature val={outdoorTemp} />
           </div>
           <PumpIcon
             fontSize="small"
             style={isOn(pumpPower) ? styles.enabled : styles.disabled}
           />
-          {/* <NightsStayIcon
-              style={
-                variables.nightShift > 0 ? styles.enabled : styles.disabled
-              }
-            /> */}
         </Toolbar>
       </AppBar>
     );

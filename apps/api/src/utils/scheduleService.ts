@@ -1,10 +1,7 @@
 import {mqttService} from '@monorepo/mqtt';
 import {RequestSetTopic, RoomNames} from '@monorepo/core';
-import {getState} from '@monorepo/store';
-import {isNull} from 'util';
-import {scheduleJob} from 'node-schedule';
+import {getState, removeAwayUntil, setAwayUntil} from '@monorepo/store';
 
-const AWAY_TEMP = 10;
 const ROOMS: RoomNames[] = ['studio', 'bathroom', 'kidsroom', 'bedroom'];
 const DAY = 24 * 60 * 60 * 1000;
 
@@ -19,26 +16,21 @@ function queueShift(topic: RoomNames, temp: number) {
   );
 }
 
-function setAwayTemp() {
-  ROOMS.forEach(room => queueShift(room, AWAY_TEMP));
+export function setAwayMode(until: string | null) {
+  if (until === null) {
+    removeAwayUntil();
+  } else {
+    const awayTemp = setAwayUntil(until);
+    if (awayTemp) ROOMS.forEach(room => queueShift(room, awayTemp));
+  }
 }
 
-export function setAwayMode(from: Date | null, to: Date) {
-  const {studio, bathroom, kidsroom, bedroom} = getState().variables;
-  const startHeatingTime = to.getTime() - DAY / 2;
-  if (isNull(from)) setAwayTemp();
-  else {
-    if (startHeatingTime - from.getTime() > DAY / 2)
-      scheduleJob(from, setAwayTemp);
-    else return;
+export function handleAwayUntilDone() {
+  const {away} = getState();
+  if (new Date(away.until).getTime() - Date.now() <= DAY) {
+    ROOMS.forEach(room => queueShift(room, away.restoreTo[room]));
+    removeAwayUntil();
+  } else {
+    setTimeout(handleAwayUntilDone, DAY / 2);
   }
-
-  const startHeatingDate = new Date();
-  startHeatingDate.setDate(to.getDate() - 1);
-  scheduleJob(to, () => {
-    queueShift('studio', studio);
-    queueShift('bathroom', bathroom);
-    queueShift('kidsroom', kidsroom);
-    queueShift('bedroom', bedroom);
-  });
 }

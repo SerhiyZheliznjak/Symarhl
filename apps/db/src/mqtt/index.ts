@@ -1,7 +1,7 @@
 import {ReadTopic, Topic, Variables} from '@monorepo/core';
 import {parsePayload} from '@monorepo/mqtt';
 import {setVariable, getState} from '@monorepo/store';
-import {logOutdoorTemp, logVariables} from '../influx';
+import {logVariables} from '../influx';
 
 export const handleMessage = (topic: Topic, payload: string) => {
   switch (topic) {
