@@ -35,6 +35,6 @@ const restoreState = () =>
     }
   });
 // instead there should be some kind of run on arduino is ready or smth
-setTimeout(restoreState, 60 * 2 * 1000);
+setTimeout(restoreState, 30 * 1000);
 
 export {app};
