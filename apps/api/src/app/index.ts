@@ -28,13 +28,10 @@ app.use('/system', systemRouter);
 app.use('/variables', variablesRouter);
 app.use('/schedule', scheduleRouter);
 
-const restoreState = () =>
-  readVariablesFromFile().then(({away}) => {
-    if (away) {
-      setAwayMode(away.until, true);
-    }
-  });
-// instead there should be some kind of run on arduino is ready or smth
-setTimeout(restoreState, 30 * 1000);
+readVariablesFromFile().then(({away}) => {
+  if (away) {
+    setAwayMode(away.until, true);
+  }
+});
 
 export {app};

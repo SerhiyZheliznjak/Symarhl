@@ -9,9 +9,20 @@ import {
   NO_READINGS,
   UtilityTemp,
 } from '@monorepo/core';
-import {logTemp, logPower, getState, setVariable} from '@monorepo/store';
+import {
+  logTemp,
+  logPower,
+  setVariable,
+  readVariablesFromFile,
+  getState,
+} from '@monorepo/store';
 import {mqttService, parsePayload} from '@monorepo/mqtt';
-// import {setCurrentShift} from './nightShift';
+const rooms = [
+  RoomTemp.studio,
+  RoomTemp.bathroom,
+  RoomTemp.bedroom,
+  RoomTemp.kidsroom,
+];
 
 export const handleMessage = (topic: Topic, payload: string) => {
   switch (topic) {
@@ -39,12 +50,9 @@ export const handleMessage = (topic: Topic, payload: string) => {
           logPower(topic, value),
       );
       break;
-    // case ReadTopic.variables:
-    //   parsePayload(payload).forEach(
-    //     ([topic, value]: [keyof Variables, string]) =>
-    //       setVariable(topic, parseFloat(value)),
-    //   );
-    //   break;
+    case ReadTopic.variables:
+      verifyVariables(payload);
+      break;
     case RequestSetTopic.confirmed:
       const [key, val] = payload.split('=') as [
         keyof HomeState['variables'],
@@ -54,27 +62,47 @@ export const handleMessage = (topic: Topic, payload: string) => {
       break;
     case ReadTopic.started:
       void setAllVariables();
-      // setCurrentShift();
       break;
   }
 };
 
+const verifyVariables = (payload: string) => {
+  const {variables} = getState();
+
+  const hasDifference = parsePayload(payload).find(
+    ([topic, value]: [keyof Variables, string]) => {
+      if (rooms.includes(topic as RoomTemp))
+        return (
+          variables[topic] !== NO_READINGS &&
+          parseFloat(value) !== NO_READINGS &&
+          variables[topic] !== parseFloat(value)
+        );
+      return false;
+    },
+  );
+  if (hasDifference) {
+    setAllVariables();
+  }
+};
+
 async function setAllVariables() {
-  const {variables, away} = getState();
+  const {variables, away} = await readVariablesFromFile();
 
   const values = away ? away.restoreTo : variables;
 
   Object.keys(values).forEach((variable: keyof Variables, i: number) => {
-    const value = values[variable];
-    setVariable(variable, value);
-    if (value !== NO_READINGS)
-      setTimeout(
-        () =>
-          mqttService.setVariableValue(
-            `set/${variable}` as RequestSetTopic,
-            String(value),
-          ),
-        i * 300,
-      );
+    if (variable) {
+      const value = values[variable];
+      setVariable(variable, value);
+      if (value !== NO_READINGS)
+        setTimeout(
+          () =>
+            mqttService.setVariableValue(
+              `set/${variable}` as RequestSetTopic,
+              String(value),
+            ),
+          i * 300,
+        );
+    }
   });
 }
